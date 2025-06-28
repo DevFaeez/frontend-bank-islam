@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+* {
+    margin: 0
+}
+
+.custom-bg {
+    background: url("/src/assets/bank-islam.jpg") no-repeat center;
+    background-size: cover;
+}
+
+.custom-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* background-color: rgba(138, 138, 138, 0.25); */
+  z-index: 0;
+}
+
+.card-custom-wallpaper {
+    background: url("/src/assets/card-bg.png") no-repeat center !important;
+    background-size: cover;
+}
