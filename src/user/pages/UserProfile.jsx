@@ -2,15 +2,13 @@ import { AccordionDetails, Grid, IconButton } from "@mui/material";
 import AccountSideBar from "../components/Account/AccountSideBar";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import HomeIcon from '@mui/icons-material/Home';
 import AccountDetails from "../components/Account/AccountDetails";
 import AccountTransaction from "../components/Account/AccountTransaction";
-import Transfer from "../components/Transfer/Transfer";
-import PayLoan from "../components/Loan/PayLoan";
 import { useLocation, useNavigate } from "react-router-dom";
-import BillPayment from "../components/Bill/BillPayment";
-import UserProfile from "./UserProfile";
+import UserProfiles from "../components/User/UserProfiles";
 
-export default function AccountPage() {
+export default function UserProfile() {
 
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
@@ -28,6 +26,9 @@ export default function AccountPage() {
                             <IconButton onClick={() => navigate('/user-profile')}>
                                 <AccountCircleIcon sx={{fontSize: "35px"}} color="primary"/>
                             </IconButton>
+                            <IconButton onClick={() => navigate('/dashboard')}>
+                                <HomeIcon sx={{fontSize: "32px"}} />
+                            </IconButton>
                             <IconButton onClick={() => navigate("/")}>
                                 <ExitToAppIcon sx={{fontSize: "32px"}} />
                             </IconButton>
@@ -43,10 +44,7 @@ export default function AccountPage() {
             </div>
             <div className="w-[40%] h-full bg-gray-200 p-6 flex justify-center items-center">
                 {isActive("/") && <AccountTransaction />}
-                {isActive("/dashboard") && <AccountTransaction />}
-                {isActive("/transfer") && <Transfer />}
-                {isActive("/paybill") && <BillPayment />}
-                {isActive("/payloan") && <PayLoan />}
+                {isActive("/user-profile") && <UserProfiles />}
             </div>
         </div>
     );

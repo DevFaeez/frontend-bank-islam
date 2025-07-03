@@ -11,6 +11,7 @@ import CreateLoan from "./user/components/Loan/CreateLoan";
 import LoanPage from "./user/pages/LoanPage";
 import AppRoutes from "./Routes/AppRoute";
 import TransferTransaction from "./user/components/Transaction/TransferTransaction";
+import UserProfile from "./user/pages/UserProfile";
 
 export default function App() {
   return (
