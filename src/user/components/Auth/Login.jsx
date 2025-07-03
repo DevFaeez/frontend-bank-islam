@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/thunk/AuthThunk";
 import PayLoan from "../Loan/PayLoan";
+import Swal from "sweetalert2";
 
 
 const initialValue = {
@@ -32,17 +33,23 @@ const Login = () => {
             const payload = result.payload;
 
             if (payload.result === "success") {
-                alert("Login Successful!");
-                console.log("account details", payload)
+                // alert("Login Successful!");
+                // console.log("account details", payload)
                 localStorage.setItem("accountId", payload.data.accountId)
                 navigate("/dashboard");
             } else {
-                alert(payload.message || "Registration failed");
+                Swal.fire({
+                    icon: "error",
+                    text: "Invalid username or password!",
+                });
             }
 
         } catch (error) {
-            console.error("Registration error", error);
-            alert("An unexpected error occurred.");
+            Swal.fire({
+                    icon: "error",
+                    text: "Invalid username or password!",
+            });
+            console.log(error)
         }
     };
 

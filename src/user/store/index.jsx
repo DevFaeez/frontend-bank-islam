@@ -3,13 +3,15 @@ import { authReducer } from "./slice/AuthSlice";
 import { dashboardReducer } from "./slice/DashboardSlice";
 import { billReducer } from "./slice/BillSlice";
 import { transferReducer } from "./slice/TransferSlice";
+import { goalAccountReducer } from "./slice/GoalAccountSlice";
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
         dashboard: dashboardReducer,
         bill: billReducer,
-        transfer: transferReducer
+        transfer: transferReducer,
+        goalAccount: goalAccountReducer
     }
 })
 
