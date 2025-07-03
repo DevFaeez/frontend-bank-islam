@@ -5,6 +5,7 @@ import GoalAccountPage from "../user/pages/GoalAccountPage";
 import AuthPage from "../user/pages/AuthPage";
 import Login from "../user/components/Auth/Login";
 import Homepage from "../user/pages/Homepage";
+import UserProfile from "../user/pages/UserProfile";
 
 export default function UserRoute() {
     return(
@@ -20,6 +21,8 @@ export default function UserRoute() {
             <Route path="/logout" element={<Homepage />} />
             <Route path="/register" element={<AuthPage />} />
             <Route path="/login" element={<AuthPage />} />
+            <Route path="/app" element={<AuthPage />} />
+            <Route path="/user-profile" element={<UserProfile />} />
         </Routes>
     )
-}   
+}       

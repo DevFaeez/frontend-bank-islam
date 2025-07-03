@@ -10,6 +10,12 @@
     background-size: cover;
 }
 
+.admin-bg {
+    background: url("/src/assets/bank-islam-2.jpg") no-repeat center;
+    background-size: 50vh;
+    background-position: 40vh;
+}
+
 .custom-bg::before {
   content: "";
   position: absolute;
