@@ -6,6 +6,7 @@ import AuthPage from "../user/pages/AuthPage";
 import Login from "../user/components/Auth/Login";
 import Homepage from "../user/pages/Homepage";
 import UserProfile from "../user/pages/UserProfile";
+import AdminPage from "../user/pages/AdminPage";
 
 export default function UserRoute() {
     return(
@@ -23,6 +24,9 @@ export default function UserRoute() {
             <Route path="/login" element={<AuthPage />} />
             <Route path="/app" element={<AuthPage />} />
             <Route path="/user-profile" element={<UserProfile />} />
+            <Route path="/admin-dashboard" element={<AdminPage />} />
+            <Route path="/admin-transaction" element={<AdminPage />} />
+            <Route path="/admin-profile" element={<AdminPage />} />
         </Routes>
     )
 }       
