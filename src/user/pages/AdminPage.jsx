@@ -6,6 +6,7 @@ import AdminSideBar from "../components/Admin/AdminSideBar";
 import AdminAccountDetails from "../components/Admin/AdminAccountDetail";
 import AdminTransferDetails from "../components/Admin/AdminTransactionDetail";
 import AdminProfile from "../components/Admin/AdminProfile";
+import AdminUserDetail from "../components/Admin/AdminUserDetail";
 
 
 export default function AdminPage() {
@@ -48,6 +49,7 @@ export default function AdminPage() {
             {isActive("/admin-dashboard") && <AdminAccountDetails />}
             {isActive("/admin-transaction") && <AdminTransferDetails />}
             {isActive("/admin-profile") && <AdminProfile />}
+            {isActive("/admin-userDetail") && <AdminUserDetail />}
             {/* Add more conditions if needed */}
           </div>
 

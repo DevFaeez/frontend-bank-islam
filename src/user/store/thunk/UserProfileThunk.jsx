@@ -17,4 +17,20 @@ export const fetchUser = createAsyncThunk(
     }
 )
 
+export const updateUserProfile = createAsyncThunk(
+  "user/update",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${BASEURL}/Controller/userController.php?action=updateUser`,
+        userData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: "Unknown error" });
+    }
+  }
+);
+
     

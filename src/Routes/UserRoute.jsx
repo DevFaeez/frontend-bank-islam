@@ -27,6 +27,7 @@ export default function UserRoute() {
             <Route path="/admin-dashboard" element={<AdminPage />} />
             <Route path="/admin-transaction" element={<AdminPage />} />
             <Route path="/admin-profile" element={<AdminPage />} />
+            <Route path="/admin-userDetail" element={<AdminPage />} />
         </Routes>
     )
 }       

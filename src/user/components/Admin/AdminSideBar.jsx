@@ -2,7 +2,7 @@ import IconButton from "@mui/material/IconButton";
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import { Tooltip } from "@mui/material";
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
-import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import PeopleIcon from '@mui/icons-material/People';import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useLocation, useNavigate } from "react-router-dom";
@@ -25,26 +25,20 @@ export default function AdminSideBar() {
                 </Tooltip>
             </div>
             <div className="py-1.5">
+                <Tooltip title="User Management" placement="right">
+                    <IconButton onClick={() => navigate("/admin-userDetail")}>
+                        <PeopleIcon sx={{color: isActive("/admin-userDetail") ? "#DC2A54" : "gray", fontSize: "37px"}} />
+                    </IconButton>
+                </Tooltip>
+            </div>
+            <div className="py-1.5">
                 <Tooltip title="Transaction Management" placement="right">
                     <IconButton onClick={() => navigate("/admin-transaction")}>
                         <CurrencyExchangeIcon sx={{color: isActive("/admin-transaction") ? "#DC2A54" : "gray", fontSize: "37px"}} />
                     </IconButton>
                 </Tooltip>
             </div>
-            <div className="py-1.5">
-                <Tooltip title="Bill Management" placement="right">
-                    <IconButton onClick={() => navigate("")}>
-                        <RequestQuoteIcon sx={{color: isActive("/paybill") ? "#DC2A54" : "gray", fontSize: "37px"}} />
-                    </IconButton>
-                </Tooltip>
-            </div>
-            <div className="py-1.5">
-                <Tooltip title="Loan Management" placement="right">
-                    <IconButton onClick={() => navigate("")}>
-                        <LocalAtmIcon sx={{color: isActive("/payloan") ? "#DC2A54" : "gray", fontSize: "37px"}} />
-                    </IconButton>
-                </Tooltip>
-            </div>
+            
         </div>
     )
 }
