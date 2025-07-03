@@ -1,6 +1,10 @@
 import { Button, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { Field, Form, Formik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import * as Yup from "yup";
+import { transfer } from "../../store/thunk/TransferThunk";
+import { fetchDashboard } from "../../store/thunk/DashboardThunk";
 
 const initialValue = {
     transferAmount: "",
@@ -22,9 +26,52 @@ const validationScheme = Yup.object().shape({
 
 export default function Transfer() {
 
-    const handleSubmit = () => {
+    const dispatch = useDispatch();
+    const dashboard = useSelector(state => state.dashboard.data);
 
-    }
+const handleSubmit = async (values, { resetForm }) => {
+    const data = {
+        senderAccountId: localStorage.getItem("accountId"),
+        balance: dashboard.balance,
+        receiverAccountNumber: values.transferTo,
+        amount: values.transferAmount,
+        description: values.transferDesc,
+        transferMode: values.transferMode,
+        transferType: values.transferType
+    };
+
+    const result = await dispatch(transfer(data));
+    const payload = result.payload;
+
+    let timerInterval;
+    Swal.fire({
+        html: "Authenticating transfer in <b></b> milliseconds...",
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+                timer.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+        },
+        willClose: () => {
+            clearInterval(timerInterval);
+        }
+    }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+            console.log("payload", payload);
+
+            if ("payload", payload.result === "success") {
+                Swal.fire("Transfer Success", "Transfer completed successfully!", "success");
+                resetForm();
+                dispatch(fetchDashboard(localStorage.getItem("accountId")));
+            } else {
+                Swal.fire("Transfer Failed", payload.message || "Transfer faile", "error");
+            }
+        }
+    });
+};
 
     return (
         <div className="bg-white p-8 rounded-2xl">
@@ -58,14 +105,14 @@ export default function Transfer() {
                                 />
                             </Grid>
                             <Grid item size={12}>
-                                <Typography sx={{ fontSize: "11px" }}>Transfer to</Typography>
+                                <Typography sx={{ fontSize: "11px" }}>Transfer Amount</Typography>
                                 <Field
                                     as={TextField}
                                     name="transferAmount"
                                     fullWidth
                                     variant="outlined"
                                     margin="dense"
-                                    placeholder="Transfer to"
+                                    placeholder="Transfer amount"
                                     helperText={
                                         touched.transferAmount && errors.transferAmount
                                     }

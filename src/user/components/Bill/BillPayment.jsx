@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { billPayment, fetchBill } from "../../store/thunk/Billthunk";
 import { formatBillData } from "../../util/billClasification";
+import Swal from "sweetalert2";
+import { fetchDashboard } from "../../store/thunk/DashboardThunk";
 
 const initialValue = {
     billAmount: "",
@@ -43,7 +45,7 @@ export default function BillPayment() {
         return [];
     }, [bill]);
 
-    const handleSubmit = (values) => {
+    const handleSubmit = async(values, {resetForm}) => {
         console.log("values", values);
         const data = {
             billAccountNumber: values.billAccountNumber,
@@ -53,7 +55,37 @@ export default function BillPayment() {
             accountId: localStorage.getItem("accountId"),
             balance: dashbaord.balance
         };
-        dispatch(billPayment(data));
+        const result = await dispatch(billPayment(data));
+        const payload = result.payload;
+
+        let timerInterval;
+            Swal.fire({
+                html: "Authenticating bill payment in <b></b> milliseconds...",
+                timer: 1500,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log("payload", payload);
+        
+                    if ("payload", payload.result === "success") {
+                        Swal.fire("Bill payment Success", "Bill Payment completed successfully!", "success");
+                        resetForm();
+                        dispatch(fetchDashboard(localStorage.getItem("accountId")));
+                    } else {
+                        Swal.fire("Bill Payment Failed", payload.message || "Bill Payment fail", "error");
+                    }
+                }
+            });
     }
 
 

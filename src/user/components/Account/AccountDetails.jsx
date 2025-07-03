@@ -12,12 +12,12 @@ import { fetchDashboard } from "../../store/thunk/DashboardThunk";
 export default function AccountDetails() {
 
   const dispatch = useDispatch();
-  const dashboard = useSelector(state => state.dashboard.data); // adjust if your slice is named differently
+  const dashboard = useSelector(state => state.dashboard.data);
 
   useEffect(() => {
     const accountId = localStorage.getItem("accountId");
     dispatch(fetchDashboard(accountId));
-  }, [])
+  }, []);
 
   return (
     <div className="flex flex-col pe-7 gap-3">
@@ -50,7 +50,7 @@ export default function AccountDetails() {
           </div>
         </div>
         <div className="flex justify-between">
-          <Card  sx={{ width: "9.5cm", height: "5.7cm", borderRadius: "15px", boxShadow: 4, backgroundImage: `url(${cardBg})`, backgroundSize: "cover", backgroundPosition: "top" }} className="flex flex-col justify-between px-8 py-6">
+          <Card sx={{ width: "9.5cm", height: "5.7cm", borderRadius: "15px", boxShadow: 4, backgroundImage: `url(${cardBg})`, backgroundSize: "cover", backgroundPosition: "top" }} className="flex flex-col justify-between px-8 py-6">
             <Typography variant="c" sx={{ fontWeight: "bold", color: "white" }}>
               Qard Saving Account
             </Typography>
