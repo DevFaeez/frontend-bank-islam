@@ -7,13 +7,7 @@ export const fetchDashboard = createAsyncThunk(
     async(accountId, {rejectWithValue}) => {
         try {
             const response = await axios.get(`${BASEURL}/Controller/DashboardController.php?action=fetchDashboard&accountId=${accountId}`)
-            // return response.data;
-
-
-            console.log("fetchDashboard response", response.data);
-
             return response.data;
-
         } catch (error) {
             return rejectWithValue(error.response?.data || { message: "Unknown error" });
         }
