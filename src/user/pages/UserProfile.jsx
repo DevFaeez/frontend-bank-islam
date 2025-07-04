@@ -26,9 +26,6 @@ export default function UserProfile() {
                             <IconButton onClick={() => navigate('/user-profile')}>
                                 <AccountCircleIcon sx={{fontSize: "35px"}} color="primary"/>
                             </IconButton>
-                            <IconButton onClick={() => navigate('/dashboard')}>
-                                <HomeIcon sx={{fontSize: "32px"}} />
-                            </IconButton>
                             <IconButton onClick={() => navigate("/")}>
                                 <ExitToAppIcon sx={{fontSize: "32px"}} />
                             </IconButton>
