@@ -41,7 +41,6 @@ const billSlice = createSlice({
             .addCase(billPayment.fulfilled, (state, action) => {
                 console.log("BillPayment fulfilled", action.payload);
                 state.loading = false;
-                state.data = action.payload.data;
             })
     }
 

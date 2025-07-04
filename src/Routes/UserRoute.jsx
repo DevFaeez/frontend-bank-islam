@@ -21,8 +21,8 @@ export default function UserRoute() {
             <Route path="/logout" element={<Homepage />} />
             <Route path="/register" element={<AuthPage />} />
             <Route path="/login" element={<AuthPage />} />
-            <Route path="/app" element={<AuthPage />} />
-            <Route path="/user-profile" element={<UserProfile />} />
+            {/* <Route path="/app" element={<AuthPage />} /> */}
+            {/* <Route path="/user-profile" element={<UserProfile />} /> */}
         </Routes>
     )
 }       

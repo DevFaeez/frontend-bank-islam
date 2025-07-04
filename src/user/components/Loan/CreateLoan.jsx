@@ -13,12 +13,15 @@ import {
     Typography,
 } from "@mui/material";
 import { Field, Form, Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import * as Yup from "yup";
 import { uploadImagesToFirebase } from "../../util/uploadImagesToFirebase";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteImagesFromFirebase } from "../../util/deleteImagesFromFirebase";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLoan, submitNewLoan } from "../../store/thunk/LoanThunk";
+import Swal from "sweetalert2";
 
 const initialValue = {
     loanPurpose: "",
@@ -42,10 +45,15 @@ const validationScheme = Yup.object().shape({
     paySlip: Yup.array()
         .required("Pay slips are required")
         .length(3, "You must upload exactly 3 pay slip PDF files"), // ✅ Use `.length(3)` for exactly 3 files
-    icSlip: Yup.mixed()
-        .required("IC slip is required")
-    
+    icSlip: Yup.mixed().required("IC slip is required"),
 });
+
+function formatCamelCase(text) {
+    return text
+        .replace(/([A-Z])/g, ' $1')       // insert space before capital letters
+        .replace(/^./, str => str.toUpperCase())  // capitalize first letter
+        .replace(/\b\w/g, c => c.toUpperCase());  // capitalize each word
+}
 
 export default function CreateLoan() {
     const [uploadPaySlip, setUploadPaySlip] = useState(false);
@@ -54,9 +62,52 @@ export default function CreateLoan() {
     const [uploadICSlip, setUploadICSlip] = useState(false);
     const [successUploadICSlip, setSuccessUploadICSlip] = useState([]);
 
-    const handleSubmit = (values) => {
-        // console.log("login value", values)
-        console.log("click here", values);
+    const paySlipRef = useRef(null);
+    const icSlipRef = useRef(null);
+
+    const dispatch = useDispatch();
+    const availableLoan = useSelector((state) => state.loan.availableLoan);
+
+    useEffect(() => {
+        dispatch(fetchLoan());
+    }, []);
+
+    const handleSubmit = async (values, { resetForm }) => {
+
+        const paySlipUrl = values.paySlip.join(',')
+        const icSlipSUrl = values.icSlip.join(',');
+        console.log("the submit loan values", values)
+
+        const amount = parseInt(
+            Number(values.loanAmount) + (Number(values.loanAmount) * (Number(values.interestRate) / 100))
+        );
+
+        const loanApplication = {
+            icSlip: icSlipSUrl,
+            loanAmount: amount,
+            loanPurpose: values.loanPurpose,
+            loanTerm: values.loanTerm,
+            loanId: values.loanType,
+            paySlip: paySlipUrl,
+            paymentMethod: formatCamelCase(values.paymentMethod),
+            accountId: localStorage.getItem("accountId")
+        };
+
+        const result = await dispatch(submitNewLoan(loanApplication));
+        if (result.payload.result === "success") {
+            Swal.fire({
+                icon: "success",
+                title: "Success Submit the loan",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            resetForm();
+            setSuccessUploadPaySlip([]);
+            setSuccessUploadICSlip([]);
+            paySlipRef.current.value = null;
+            icSlipRef.current.value = null;
+        }
+
     };
 
     const handleRemoveImage = async (index, imagesUrl) => {
@@ -74,7 +125,14 @@ export default function CreateLoan() {
     return (
         <div className="lg:flex flex-col ps-37  ">
             <div className="">
-                <Typography sx={{ fontSize: "20px", color: "#DC2A54", fontWeight: "bold", paddingLeft: "220px" }}>
+                <Typography
+                    sx={{
+                        fontSize: "20px",
+                        color: "#DC2A54",
+                        fontWeight: "bold",
+                        paddingLeft: "220px",
+                    }}
+                >
                     L O A N ‎ ‎ ‎ A P P L I C A T I O N
                 </Typography>
             </div>
@@ -86,7 +144,9 @@ export default function CreateLoan() {
                 {({ errors, touched, values, setFieldValue }) => (
                     <Form className="w-[90%] lg:w-[70%] mx-auto p-2">
                         <Grid container rowSpacing={0} columnSpacing={1}>
-                            <Typography sx={{ fontSize: "13px" }}>Pay Slip(3 latest payslip in pdf format)</Typography>
+                            <Typography sx={{ fontSize: "13px" }}>
+                                Pay Slip(3 latest payslip in pdf format)
+                            </Typography>
                             <br />
                             <Grid
                                 item
@@ -94,6 +154,7 @@ export default function CreateLoan() {
                                 className="pb-1 flex justify-start items-center gap-2"
                             >
                                 <input
+                                    ref={paySlipRef}
                                     accept="application/pdf"
                                     id="paySlipInput"
                                     style={{ display: "none" }}
@@ -168,7 +229,9 @@ export default function CreateLoan() {
                                     ))}
                                 </div>
                             </Grid>
-                            <Typography sx={{ fontSize: "13px" }}>IC Slip(pdf format)</Typography>
+                            <Typography sx={{ fontSize: "13px" }}>
+                                IC Slip(pdf format)
+                            </Typography>
                             <br />
                             <Grid
                                 item
@@ -176,6 +239,7 @@ export default function CreateLoan() {
                                 className="pb-1 flex justify-start items-center gap-2"
                             >
                                 <input
+                                    ref={icSlipRef}
                                     accept="application/pdf"
                                     id="icSlip"
                                     style={{ display: "none" }}
@@ -278,9 +342,7 @@ export default function CreateLoan() {
                                         },
                                     }}
                                     onChange={(e) => {
-                                        const rate = e.target.value < 10000 ? 6 : 4;
                                         setFieldValue("loanAmount", e.target.value);
-                                        setFieldValue("interestRate", rate);
                                     }}
                                     helperText={touched.loanAmount && errors.loanAmount}
                                     error={touched.loanAmount && Boolean(errors.loanAmount)}
@@ -306,7 +368,8 @@ export default function CreateLoan() {
                                 />
                             </Grid>
                             <Grid item size={4}>
-                                <FormControl className="w-full"
+                                <FormControl
+                                    className="w-full"
                                     margin="dense"
                                     fullWidth
                                     error={touched.loanType && Boolean(errors.loanType)}
@@ -320,13 +383,17 @@ export default function CreateLoan() {
                                         label="Loan Type"
                                         onChange={(e) => {
                                             setFieldValue("loanType", e.target.value);
+                                            const selectedLoan = availableLoan.find((loan) => loan.LOANID === e.target.value);
+                                            const rate = selectedLoan ? selectedLoan.INTERESTRATE : '';
+                                            setFieldValue("interestRate", rate);
+                                            console.log("loan", rate)
                                         }}
                                     >
-                                        <MenuItem value={"personalLoan"}>Personal Loan</MenuItem>
-                                        <MenuItem value={"educationLoan"}>Education Loan</MenuItem>
-                                        <MenuItem value={"businessLoan"}>Business Loan</MenuItem>
-                                        <MenuItem value={"medicalLoan"}>Medical Loan</MenuItem>
-                                        <MenuItem value={"other"}>Other</MenuItem>
+                                        {availableLoan.map((loan) => (
+                                            <MenuItem value={loan.LOANID}>
+                                                {loan.LOANTYPE}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                     {touched.loanType && errors.loanType && (
                                         <FormHelperText>{errors.loanType}</FormHelperText>
@@ -334,7 +401,8 @@ export default function CreateLoan() {
                                 </FormControl>
                             </Grid>
                             <Grid item size={4}>
-                                <FormControl className="w-full"
+                                <FormControl
+                                    className="w-full"
                                     margin="dense"
                                     fullWidth
                                     error={touched.loanTerm && Boolean(errors.loanTerm)}
@@ -361,12 +429,15 @@ export default function CreateLoan() {
                                 </FormControl>
                             </Grid>
                             <Grid item size={4}>
-                                <FormControl className="w-full"
+                                <FormControl
+                                    className="w-full"
                                     margin="dense"
                                     fullWidth
                                     error={touched.paymentMethod && Boolean(errors.paymentMethod)}
                                 >
-                                    <InputLabel id="loan-payment-method-label">Payment Method</InputLabel>
+                                    <InputLabel id="loan-payment-method-label">
+                                        Payment Method
+                                    </InputLabel>
                                     <Select
                                         labelId="loan-payment-method-label"
                                         id="paymentMethod"
@@ -386,7 +457,14 @@ export default function CreateLoan() {
                                 </FormControl>
                             </Grid>
                             <Grid item size={12}>
-                                <Button fullWidth variant="contained" type="submit" sx={{ paddingY: "8px", marginTop: "8px" }}>Apply Loan</Button>
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    type="submit"
+                                    sx={{ paddingY: "8px", marginTop: "8px" }}
+                                >
+                                    Apply Loan
+                                </Button>
                             </Grid>
                         </Grid>
                     </Form>

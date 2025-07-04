@@ -1,7 +1,11 @@
 import { Button, FormControl, FormHelperText, Grid, InputAdornment, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { Field, Form, Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
+import { fetchMyLoan, payMyLoan } from "../../store/thunk/LoanThunk";
+import Swal from "sweetalert2";
+import { fetchDashboard } from "../../store/thunk/DashboardThunk";
 
 const initialValue = {
     loanDesc: "",
@@ -12,55 +16,64 @@ const initialValue = {
 const validationScheme = Yup.object().shape({
     loanDesc: Yup.string().required("loan description is required"),
     loanAmount: Yup.number()
-        .typeError("Transfer amount must be a number")
-        .required("transfer amount is required"),
+        .typeError("loan pay amount must be a number")
+        .required("loan pay amount is required"),
+    loanId: Yup.string().required("Loan selection is required"),
 });
-
-const data = [
-    {
-        loanId: "001",
-        loanPurpose: "Business Expansion",
-        loanDetails: {
-            loanAmount: "300000",
-            loanBalance: "250000",
-            loanInterestRate: "4",
-            loanTerm: "12",
-            loanType: "Term Loan"
-        }
-    },
-    {
-        loanId: "002",
-        loanPurpose: "Equipment Purchase",
-        loanDetails: {
-            loanAmount: "150000",
-            loanBalance: "100000",
-            loanInterestRate: "5.5",
-            loanTerm: "24",
-            loanType: "Equipment Loan"
-        }
-    },
-    {
-        loanId: "003",
-        loanPurpose: "Working Capital",
-        loanDetails: {
-            loanAmount: "50000",
-            loanBalance: "20000",
-            loanInterestRate: "3.75",
-            loanTerm: "6",
-            loanType: "Line of Credit"
-        }
-    }
-];
-
 
 
 export default function PayLoan() {
     const [loanView, setLoanView] = useState(false);
     const [displayLoanDetails, setDisplayLoanDetails] = useState(null);
+    const dispatch = useDispatch();
+    const myLoandata = useSelector(state => state.loan.myLoan);
 
-    const hanldeSubmit = () => {
+    const hanldeSubmit = async (values, { resetForm }) => {
+        const data = {
+            accountId: localStorage.getItem("accountId"),
+            accountLoanId: values.loanId,
+            payAmount: values.loanAmount,
+            description: values.loanDesc
+        }
+        console.log("myLoandata", data);
 
+        const result = await dispatch(payMyLoan(data));
+        const payload = result.payload;
+
+        let timerInterval;
+        Swal.fire({
+            html: "Authenticating payment in <b></b> milliseconds...",
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("payload", payload);
+
+                if (payload.result === "success") {
+                    Swal.fire("Loan Payment Success", "payment completed successfully!", "success");
+                    resetForm();
+                    setLoanView(false)
+                    dispatch(fetchDashboard(localStorage.getItem("accountId")));
+                } else {
+                    Swal.fire("Transfer Failed", payload.message || "Transfer failed", "error");
+                }
+            }
+        });
     }
+
+    useEffect(() => {
+        dispatch(fetchMyLoan(localStorage.getItem("accountId")));
+    }, [])
     return (
         <div className="bg-white p-8 rounded-2xl">
             <div className="flex flex-col gap-2 pb-5">
@@ -88,15 +101,14 @@ export default function PayLoan() {
                                         value={values.loanId}
                                         onChange={(e) => {
                                             setFieldValue("loanId", e.target.value); onabort
-                                            const selectedLoan = data.find((loan) => loan.loanId === e.target.value);
-                                            console.log("the details: ", selectedLoan)
-                                            setDisplayLoanDetails(selectedLoan.loanDetails);
+                                            const selectedLoan = myLoandata.find((loan) => loan.ACCOUNTLOANID === e.target.value);
+                                            setDisplayLoanDetails(selectedLoan);
                                             setLoanView(true);
                                         }}
                                     >
                                         {
-                                            data.map((loan) => {
-                                                return <MenuItem value={loan.loanId}>{loan.loanPurpose}</MenuItem>
+                                            myLoandata.map((loan) => {
+                                                return <MenuItem value={loan.ACCOUNTLOANID}>{loan.PURPOSE}</MenuItem>
                                             })
                                         }
                                     </Select>
@@ -106,23 +118,17 @@ export default function PayLoan() {
                                 </FormControl>
                             </Grid>
                             <Grid item size={12}>
-                                <Typography variant="body1" fontWeight={"bold"} sx={{ color: "#DC2A54", textAlign: "center" }}>L O A N ‎ ‎ ‎ D E T A I L S </Typography>                                {
-                                    loanView && displayLoanDetails && Object.entries(displayLoanDetails).map(([key, value]) => {
-                                        let formattedValue = value;
-                                        if (key === "loanAmount" || key === "loanBalance") {
-                                            formattedValue = `RM ${value}`
-                                        } else if (key === "loanInterestRate") {
-                                            formattedValue = `${value}%`
-                                        } else if (key === "loanTerm") {
-                                            formattedValue = `${value} Month(s)`
-                                        }
-
-                                        return (
-                                            <Typography key={key} sx={{ fontSize: "14px" }}>
-                                                <strong>{key}:</strong> {formattedValue}
-                                            </Typography>
-                                        );
-                                    })
+                                <Typography variant="body1" fontWeight={"bold"} sx={{ color: "#DC2A54", textAlign: "center", paddingBottom: "5px" }}>L O A N ‎ ‎ ‎ D E T A I L S </Typography>
+                                {
+                                    loanView && (
+                                        <>
+                                            <Typography sx={{ fontSize: "14px" }}><b>Loan Amount: </b>RM{displayLoanDetails.AMOUNT}</Typography>
+                                            <Typography sx={{ fontSize: "14px" }}><b>Loan Pay: </b>RM {displayLoanDetails.BALANCE}</Typography>
+                                            <Typography ax={{ fontSize: "14px" }}><b>Loan Date: </b>{displayLoanDetails.CREATEDAT}</Typography>
+                                            <Typography sx={{ fontSize: "14px" }}><b>Payment Method: </b>{displayLoanDetails.PAYMENTMETHOD}</Typography>
+                                            <Typography sx={{ fontSize: "14px" }}><b>Loan Term: </b>{displayLoanDetails.TERM} Month</Typography>
+                                        </>
+                                    )
                                 }
                             </Grid>
                             <Grid item size={12}>
@@ -141,7 +147,7 @@ export default function PayLoan() {
                                             ),
                                         },
                                     }}
-                                    helpertext={
+                                    helperText={
                                         touched.loanAmount && errors.loanAmount
                                     }
                                     error={
@@ -158,7 +164,7 @@ export default function PayLoan() {
                                     variant="outlined"
                                     margin="dense"
                                     placeholder="Pay Loan Description"
-                                    helpertext={
+                                    helperText={
                                         touched.loanDesc && errors.loanDesc
                                     }
                                     error={
