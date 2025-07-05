@@ -1,7 +1,7 @@
 import { Box, Modal, Typography } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TransferTransaction from "../Transaction/TransferTransaction";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
