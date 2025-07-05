@@ -15,6 +15,20 @@ export const fetchBill = createAsyncThunk(
     }
 )
 
+export const fetchAllBillTrans = createAsyncThunk(
+    "bill/fetch",
+    async (_,{rejectWithValue}) => {
+        try {
+            const response = await axios.get(`${BASEURL}/Controller/BillController.php?action=fetchAllBillTrans`);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || { message: "Unknown error" });
+
+        }
+    }
+)
+
+
 export const billPayment = createAsyncThunk(
     "bill/payment",
     async (data, {rejectWithValue}) => {

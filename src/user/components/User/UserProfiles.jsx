@@ -82,8 +82,8 @@ export default function UserProfiles() {
   return (
     <div className="bg-white p-8 rounded-2xl w-full">
       <div className="flex justify-between items-center pb-4">
-        <Typography variant="body2" fontSize={15} fontWeight={"bold"}>
-          User Information
+        <Typography variant="body2" fontSize={14} fontWeight={"bold"} sx={{color: "#DC2A54"}}>
+          U S E R &nbsp;&nbsp;&nbsp;I N F O R M A T I O N
         </Typography>
         <div className="flex gap-2">
           {isEditing && (

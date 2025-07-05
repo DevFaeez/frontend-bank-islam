@@ -1,6 +1,6 @@
 
 import { Divider, IconButton, Grid } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdminSideBar from "../components/Admin/AdminSideBar";
 import AdminAccountDetails from "../components/Admin/AdminAccountDetail";
@@ -20,14 +20,15 @@ export default function AdminPage() {
       {/* Header */}
       <div
         className="w-full flex items-center justify-between px-10 py-4 shadow h-20"
-        style={{ backgroundColor: 'rgb(247, 95, 90)' }}
+        style={{ backgroundColor: 'rgb(220, 42, 84)' }}
       >
-        <div className="flex items-center gap-4">
-          <div className="text-1xl font-bold">A D M I N</div>
-          <img src="/src/assets/logbankislam.png" alt="Logo" width="100" height="20" />
-        </div>
+        <div className="flex items-center gap-1">
+        <div className="text-1xl font-bold text-white">A D M I N</div>
+        <img src="/src/assets/logo-bank-isle3.png" className="w-30 h-30 transform -translate-x-10"/>
+      </div>
+
         <div>
-          <IconButton onClick={() => navigate('/admin-profile')}>
+          <IconButton onClick={() => navigate('/admin/profile')}>
             <AccountCircleIcon sx={{ fontSize: 40, color: "white" }} color="primary" />
           </IconButton>
         </div>
@@ -44,13 +45,9 @@ export default function AdminPage() {
 
         {/* Display Area */}
         <div className="w-full bg-gray-200 p-8 m-6  shadow overflow-y-auto">
-          <div className="text-xl font-semibold pb-10"></div>
+          <div className="text-xl font-semibold"></div>
           <div className=" w-full h-100 mt-10 rounded-xl">
-            {isActive("/admin-dashboard") && <AdminAccountDetails />}
-            {isActive("/admin-transaction") && <AdminTransferDetails />}
-            {isActive("/admin-profile") && <AdminProfile />}
-            {isActive("/admin-userDetail") && <AdminUserDetail />}
-            {/* Add more conditions if needed */}
+            <Outlet/>
           </div>
 
         </div>

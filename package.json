@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.9.0",
     "bank-islam-frontend": "file:",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "firebase": "^11.9.1",
     "formik": "^2.4.6",

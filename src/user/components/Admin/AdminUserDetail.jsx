@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper,
-  styled
+  styled,
+  Typography
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUser } from "../../store/thunk/Admin/AdminUserDetailTrunk";
@@ -19,13 +20,21 @@ export default function AdminUserDetail() {
     }
   )
 
+  const HoverRow = styled(TableRow)(({ theme }) => ({
+  '&:hover td': {
+    backgroundColor: '#f2dbe1',
+    color: '#c41b49',
+    },
+  }));
+
+
   useEffect(() => {
     dispatch(fetchAllUser());
   }, [dispatch]);
 
   return (
     <div className="bg-white p-8 rounded-2xl w-full">
-      <h2 className="text-xl font-bold mb-4 pb-10">User List</h2>
+      <Typography variant="body2" fontSize={15} fontWeight={"bold"} sx={{color: "#DC2A54"}} paddingBottom={'16px'}>U S E R &nbsp;&nbsp; M A N A G E M E N T</Typography>
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
@@ -50,7 +59,7 @@ export default function AdminUserDetail() {
               </TableRow>
             ) : (
               adminUserDetail.map((tx) => (
-                <TableRow key={tx.USERID}>
+                <HoverRow key={tx.USERID}>
                   <TableCell>{tx.USERID}</TableCell>
                   <TableCell>{tx.FULLNAME}</TableCell>
                   <TableCell>{tx.NRICNUMBER}</TableCell>
@@ -58,7 +67,7 @@ export default function AdminUserDetail() {
                   <TableCell>{tx.PHONENUMBER ?? "N/A"}</TableCell>
                   <TableCell>{tx.STATUS}</TableCell>
                   <TableCell>{tx.ACCOUNTNUMBER}</TableCell>
-                </TableRow>
+                </HoverRow>
               ))
             )}
           </TableBody>

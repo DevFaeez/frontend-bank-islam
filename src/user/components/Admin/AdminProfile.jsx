@@ -17,7 +17,7 @@ export default function AdminProfile() {
   return (
       <div className="bg-white p-8 rounded-2xl w-full">
          <div className="flex justify-between items-center pb-4">
-                <Typography variant="body2" fontSize={15} fontWeight={"bold"}>admin Information</Typography>
+                <Typography variant="body2" fontSize={15} fontWeight={"bold"} sx={{color: "#DC2A54"}}>A D M I N &nbsp;&nbsp;&nbsp;I N F O R M A T I O N</Typography>
           </div>
              <TextField fullWidth label="Full Name" value={admin.fullName || "N/A"} inputProps={{readOnly: true}} margin="normal" InputLabelProps= {{sx: {fontSize: '18px', fontWeight: 'bold'}}} InputProps={{sx: {backgroundColor: "white"}}} />
              <TextField fullWidth label="Username" value={admin.username || "N/A"} inputProps={{readOnly: true}} margin="normal" InputLabelProps= {{sx: {fontSize: '18px', fontWeight: 'bold'}}} />

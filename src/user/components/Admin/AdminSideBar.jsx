@@ -8,6 +8,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useLocation, useNavigate } from "react-router-dom";
 import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
+import SyncAltOutlinedIcon from '@mui/icons-material/SyncAltOutlined';
 
 export default function AdminSideBar() {
 
@@ -18,23 +19,24 @@ export default function AdminSideBar() {
     return(
         <div className="flex flex-col items-center justify-center w-fit p-5 rounded-2xl shadow-2xl">
             <div className="py-1.5">
-                <Tooltip title="Admin Dashboard" placement="right">
-                    <IconButton onClick={() => navigate("/admin-dashboard")}>
-                        <DashboardOutlinedIcon sx={{color: isActive("/admin-dashboard") ? "#DC2A54" : "gray", fontSize: "37px"}} />
-                    </IconButton>
+               <Tooltip title="Admin Dashboard" placement="right">
+                <IconButton onClick={() => navigate("/admin/dashboard")}>
+                    <DashboardOutlinedIcon sx={{ color: isActive("/admin/dashboard") ? "#DC2A54" : "gray", fontSize: "37px" }} />
+                </IconButton>
                 </Tooltip>
+
             </div>
             <div className="py-1.5">
                 <Tooltip title="User Management" placement="right">
-                    <IconButton onClick={() => navigate("/admin-userDetail")}>
-                        <PeopleIcon sx={{color: isActive("/admin-userDetail") ? "#DC2A54" : "gray", fontSize: "37px"}} />
+                    <IconButton onClick={() => navigate("/admin/userDetail")}>
+                        <PeopleIcon sx={{color: isActive("/admin/userDetail") ? "#DC2A54" : "gray", fontSize: "37px"}} />
                     </IconButton>
                 </Tooltip>
             </div>
             <div className="py-1.5">
                 <Tooltip title="Transaction Management" placement="right">
-                    <IconButton onClick={() => navigate("/admin-transaction")}>
-                        <CurrencyExchangeIcon sx={{color: isActive("/admin-transaction") ? "#DC2A54" : "gray", fontSize: "37px"}} />
+                    <IconButton onClick={() => navigate("/admin/transaction")}>
+                        <SyncAltOutlinedIcon sx={{color: isActive("/admin-transaction") ? "#DC2A54" : "gray", fontSize: "37px"}} />
                     </IconButton>
                 </Tooltip>
             </div>
