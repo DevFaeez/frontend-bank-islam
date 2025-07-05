@@ -8,7 +8,6 @@ import Transfer from "../components/Transfer/Transfer";
 import PayLoan from "../components/Loan/PayLoan";
 import { useLocation, useNavigate } from "react-router-dom";
 import BillPayment from "../components/Bill/BillPayment";
-import UserProfile from "./UserProfile";
 
 export default function AccountPage() {
 

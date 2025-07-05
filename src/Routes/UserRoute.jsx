@@ -22,17 +22,12 @@ export default function UserRoute() {
             <Route path="/logout" element={<Homepage />} />
             <Route path="/register" element={<AuthPage />} />
             <Route path="/login" element={<AuthPage />} />
-<<<<<<< HEAD
-            {/* <Route path="/app" element={<AuthPage />} /> */}
-            {/* <Route path="/user-profile" element={<UserProfile />} /> */}
-=======
             <Route path="/app" element={<AuthPage />} />
             <Route path="/user-profile" element={<UserProfile />} />
             <Route path="/admin-dashboard" element={<AdminPage />} />
             <Route path="/admin-transaction" element={<AdminPage />} />
             <Route path="/admin-profile" element={<AdminPage />} />
             <Route path="/admin-userDetail" element={<AdminPage />} />
->>>>>>> 2d9ea03a9d9b8e62ed38b01e0f301a4e929cde37
         </Routes>
     )
 }       
