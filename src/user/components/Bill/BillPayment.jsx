@@ -7,6 +7,7 @@ import { billPayment, fetchBill } from "../../store/thunk/Billthunk";
 import { formatBillData } from "../../util/billClasification";
 import Swal from "sweetalert2";
 import { fetchDashboard } from "../../store/thunk/DashboardThunk";
+import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
 
 const initialValue = {
     billAmount: "",
@@ -35,6 +36,8 @@ export default function BillPayment() {
 
     useEffect(() => {
         dispatch(fetchBill());
+         const accountId = localStorage.getItem("accountId");
+        dispatch(fetchAllTransaction(accountId));
     }, [dispatch])
 
 

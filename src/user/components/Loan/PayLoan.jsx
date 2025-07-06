@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { fetchMyLoan, payMyLoan } from "../../store/thunk/LoanThunk";
 import Swal from "sweetalert2";
 import { fetchDashboard } from "../../store/thunk/DashboardThunk";
+import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
 
 const initialValue = {
     loanDesc: "",
@@ -73,6 +74,8 @@ export default function PayLoan() {
 
     useEffect(() => {
         dispatch(fetchMyLoan(localStorage.getItem("accountId")));
+        const accountId = localStorage.getItem("accountId");
+        dispatch(fetchAllTransaction(accountId));
     }, [])
     return (
         <div className="bg-white p-8 rounded-2xl">

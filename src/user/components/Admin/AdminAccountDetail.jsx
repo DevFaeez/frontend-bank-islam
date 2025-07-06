@@ -31,31 +31,34 @@ export default function AdminAccountDetails() {
 }, [dispatch]);
 
   // Line Chart
-  const transactionVolumeData = useMemo(() => {
-  if (!allTransaction) return { dates: [], totals: [] };
+ const transactionVolumeData = useMemo(() => {
+  if (!Array.isArray(allTransaction) || allTransaction.length === 0) {
+    return { dates: [], totals: [] };
+  }
 
+  // Step 1: Pre-group dates into counts
   const grouped = {};
 
-  allTransaction.forEach((tx) => {
+  for (const tx of allTransaction) {
     try {
-      // console.log("Raw date:", tx.TRANSACTIONDATE);
-
       const parsedDate = parse(
         tx.TRANSACTIONDATE,
         "dd-MMM-yy hh.mm.ss.SSSSSS a",
         new Date()
       );
 
-      console.log("Parsed:", parsedDate);
-
       const dateOnly = startOfDay(parsedDate);
       const dateKey = format(dateOnly, "yyyy-MM-dd");
       grouped[dateKey] = (grouped[dateKey] || 0) + 1;
     } catch (error) {
-      console.warn("Invalid date:", tx.TRANSACTIONDATE);
+      // Optionally log only in development
+      if (import.meta.env?.MODE === 'development') {
+        console.warn("Invalid date:", tx.TRANSACTIONDATE);
+      }
     }
-  });
+  }
 
+  // Step 2: Build a consistent 30-day timeline
   const today = startOfDay(new Date());
   const startDate = subDays(today, 29);
   const allDates = eachDayOfInterval({ start: startDate, end: today });
@@ -68,6 +71,7 @@ export default function AdminAccountDetails() {
     }),
   };
 }, [allTransaction]);
+
 
 
 
@@ -126,34 +130,41 @@ export default function AdminAccountDetails() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start pt-10">
         {/* Line Chart */}
-        <div className="bg-gray-100 p-4 select-none rounded-xl shadow-[0_0_10px_rgba(0,0,0,0)] hover:shadow-[0_10px_10px_rgba(0,0,0,0.3)] transition-shadow duration-300">
-          <Typography fontWeight="bold" fontSize={14} className="mb-2" sx={{ color: "#DC2A54" }} paddingBottom={"16px"}>Transaction Volume (Last 30 Days)</Typography>
-     {transactionVolumeData.dates.length > 0 && transactionVolumeData.totals.length > 0 && (
-        <LineChart
-            xAxis={[{
-              scaleType: "time",
-              data: transactionVolumeData.dates,
-              valueFormatter: (date) => format(date, "dd MMM"),
-            }]}
-            series={[{ data: transactionVolumeData.totals }]}
-            height={300}
-          />
-        )}
-        </div>
-
-        {/* Pie Chart */}
-        <div className="bg-gray-100 p-4 select-none rounded-xl shadow-[0_0_10px_rgba(0,0,0,0)] hover:shadow-[0_10px_10px_rgba(0,0,0,0.3)] transition-shadow duration-300">
-          <Typography fontWeight="bold" fontSize={14} className="mb-2"  sx={{ color: "#DC2A54" }} paddingBottom={"16px"}>Transactions by Type</Typography>
-         <BarChart
-            xAxis={[{ data: ['Type'] }]} // Only one category (column)
-            series={[
-              { data: [transactionTypeData[0]], label: 'Transfer', color: '#f14f75' },
-              { data: [transactionTypeData[1]], label: 'Bill', color: '#3f51b5' },
-              { data: [transactionTypeData[2]], label: 'Loan', color: '#4caf50' },
-            ]}
-            height={300}
-          />
+          <div className="bg-gray-100 p-4 select-none rounded-xl shadow-[0_0_10px_rgba(0,0,0,0)] 
+              hover:shadow-[0_10px_10px_rgba(0,0,0,0.3)] transition-shadow duration-300 h-[330px]">
+            <Typography fontWeight="bold" fontSize={14} className="mb-2" sx={{ color: "#DC2A54" }} paddingBottom={"16px"}>
+              Transaction Volume (Last 30 Days)
+            </Typography>
+            {transactionVolumeData.dates.length > 0 && transactionVolumeData.totals.length > 0 && (
+              <LineChart
+                xAxis={[{
+                  scaleType: "time",
+                  data: transactionVolumeData.dates,
+                  valueFormatter: (date) => format(date, "dd MMM"),
+                }]}
+                series={[{ data: transactionVolumeData.totals }]}
+                height={250} // adjusted to fit inside 330px container
+              />
+            )}
           </div>
+
+          {/* Bar Chart */}
+          <div className="bg-gray-100 p-4 select-none rounded-xl shadow-[0_0_10px_rgba(0,0,0,0)] 
+              hover:shadow-[0_10px_10px_rgba(0,0,0,0.3)] transition-shadow duration-300 h-[330px]">
+            <Typography fontWeight="bold" fontSize={14} className="mb-2" sx={{ color: "#DC2A54" }} paddingBottom={"16px"}>
+              Transactions by Type
+            </Typography>
+            <BarChart
+              xAxis={[{ data: ['Type'] }]}
+              series={[
+                { data: [transactionTypeData[0]], label: 'Transfer', color: '#f14f75' },
+                { data: [transactionTypeData[1]], label: 'Bill', color: '#3f51b5' },
+                { data: [transactionTypeData[2]], label: 'Loan', color: '#4caf50' },
+              ]}
+              height={250}
+            />
+          </div>
+
         </div>
     </div>
   );

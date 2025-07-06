@@ -5,6 +5,8 @@ import Swal from "sweetalert2";
 import * as Yup from "yup";
 import { transfer } from "../../store/thunk/TransferThunk";
 import { fetchDashboard } from "../../store/thunk/DashboardThunk";
+import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
+import { useEffect } from "react";
 
 const initialValue = {
     transferAmount: "",
@@ -28,6 +30,11 @@ export default function Transfer() {
 
     const dispatch = useDispatch();
     const dashboard = useSelector(state => state.dashboard.data);
+
+     useEffect(() => {
+             const accountId = localStorage.getItem("accountId");
+            dispatch(fetchAllTransaction(accountId));
+        }, [dispatch])
 
 const handleSubmit = async (values, { resetForm }) => {
     const data = {
