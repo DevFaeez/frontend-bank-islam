@@ -15,6 +15,11 @@ export default function AccountPage() {
     const isActive = (path) => location.pathname === path;
     const navigate = useNavigate();
 
+    const handleClick = () => {
+        navigate("/");
+        localStorage.removeItem("accountId");
+    }
+
     return (
         <div className="h-screen w-full flex">
             <div className="w-[60%] h-full">
@@ -27,7 +32,7 @@ export default function AccountPage() {
                             <IconButton onClick={() => navigate('/user-profile')}>
                                 <AccountCircleIcon sx={{fontSize: "35px"}} color="primary"/>
                             </IconButton>
-                            <IconButton onClick={() => navigate("/")}>
+                            <IconButton onClick={handleClick}>
                                 <ExitToAppIcon sx={{fontSize: "32px"}} />
                             </IconButton>
                         </div>

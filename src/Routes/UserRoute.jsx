@@ -29,14 +29,6 @@ export default function UserRoute() {
       <Route path="/login" element={<AuthPage />} />
       <Route path="/app" element={<AuthPage />} />
       <Route path="/user-profile" element={<UserProfile />} />
-
-      {/* Admin routes - with layout and nested content */}
-      <Route path="/admin" element={<AdminPage />}>
-        <Route path="dashboard" element={<AdminAccountDetails />} />
-        <Route path="profile" element={<AdminProfile />} />
-        <Route path="userDetail" element={<AdminUserDetail />} />
-        <Route path="transaction" element={<AdminTransactionManagement />} />
-      </Route>
     </Routes>
   );
 }

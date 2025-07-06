@@ -7,6 +7,7 @@ import AccountFlow from "./AccountFlow";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchDashboard } from "../../store/thunk/DashboardThunk";
+import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
 
 
 export default function AccountDetails() {
@@ -17,6 +18,7 @@ export default function AccountDetails() {
   useEffect(() => {
     const accountId = localStorage.getItem("accountId");
     dispatch(fetchDashboard(accountId));
+    dispatch(fetchAllTransaction(accountId));
   }, []);
 
   return (
