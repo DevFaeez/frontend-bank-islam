@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchAllTrans } from "../../thunk/Admin/AdminTransactionTrunk";
 
-const transactionSlice = createSlice({
-  name: "transaction",
+const AdminTransactionSlice = createSlice({
+  name: "AdminTransaction",
   initialState: {
     data: [],
     loading: false,
@@ -26,4 +26,4 @@ const transactionSlice = createSlice({
   },
 });
 
-export const transactionReducer = transactionSlice.reducer;
+export const adminTransactionReducer = AdminTransactionSlice.reducer;

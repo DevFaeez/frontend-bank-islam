@@ -12,7 +12,7 @@ export default function AdminTransactionDetail() {
   const dispatch = useDispatch();
   const [activeView, setActiveView] = useState("list"); // 'list', 'transfer', 'bill', 'loan'
 
-  const { data: transactions = [], loading, error } = useSelector(state => state.transactions || {});
+  const { data: transactions = [], loading, error } = useSelector(state => state.adminTransaction || {});
 
   const HeaderCell = styled(TableCell)({
     color: "white",

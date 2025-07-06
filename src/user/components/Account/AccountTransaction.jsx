@@ -86,6 +86,7 @@ const style = {
 };
 
 function parseCustomDate(dateStr) {
+    console.log(dateStr);
     const monthMap = {
         JAN: '01', FEB: '02', MAR: '03', APR: '04',
         MAY: '05', JUN: '06', JUL: '07', AUG: '08',
@@ -113,7 +114,7 @@ export default function AccountTransaction() {
     const [transactionType, setTransactionType] = useState(null);
     const handleClose = () => setOpen(false);
     const dispatch = useDispatch();
-    const transactionData = useSelector(state => state.transaction.transactionData);
+    const transactionData = useSelector(state => state.transaction.transactionData) || [];
 
     const handleClick = (data) => {
         setOpen(!open);

@@ -3,7 +3,7 @@ import { BASEURL } from "../../../api/configApi";
 import axios from "axios";
 
 export const fetchAllTrans = createAsyncThunk(
-  "transaction/fetch",
+  "adminTransaction/fetch",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${BASEURL}/Controller/TransactionController.php?action=fetchAllTrans`);
@@ -14,3 +14,6 @@ export const fetchAllTrans = createAsyncThunk(
     }
   }
 );
+
+
+

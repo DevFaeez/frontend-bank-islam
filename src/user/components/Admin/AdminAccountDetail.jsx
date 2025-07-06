@@ -18,7 +18,7 @@ export default function AdminAccountDetails() {
 
   const dispatch = useDispatch();
   const allUsers = useSelector((state) => state.adminUserDetail.data); // adjust state slice name
-  const allTransaction = useSelector((state) => state.transactions.data);
+  const allTransaction = useSelector((state) => state.adminTransaction.data);
 
   const allTransferTransaction = useSelector((state) => state.transferTransaction.data);
   const allBillTransaction = useSelector((state) => state.bill.data);
