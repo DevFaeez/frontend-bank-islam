@@ -4,28 +4,24 @@ import { dashboardReducer } from "./slice/DashboardSlice";
 import { billReducer } from "./slice/BillSlice";
 import { transferReducer } from "./slice/TransferSlice";
 import { goalAccountReducer } from "./slice/GoalAccountSlice";
-import { useReducer } from "react";
 import { userReducer } from "./slice/UserProfileSlice";
 import { transactionReducer } from "./slice/Admin/AdminTransactionSlice";
 import { adminReducer } from "./slice/Admin/AdminProfileSlice";
 import { userDetailReducer } from "./slice/Admin/AdminUserDetailSlice";
-import { transferTransactionReducer } from "./slice/Admin/AdminTransferTransactionSlice";
 
 const store = configureStore({
-    reducer: {
+reducer: {
         auth: authReducer,
         dashboard: dashboardReducer,
         bill: billReducer,
         user: userReducer,
         transactions: transactionReducer,
         admin: adminReducer,
+        transfer: transferReducer,
         goalAccount: goalAccountReducer,
         user: userReducer,
-        adminUserDetail: userDetailReducer,
-        transfer: transferReducer,
-        transferTransaction: transferTransactionReducer
+        adminUserDetail: userDetailReducer
     }
 })
 
 export {store}
-

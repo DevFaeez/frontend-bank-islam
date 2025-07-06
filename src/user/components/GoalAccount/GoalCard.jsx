@@ -102,7 +102,6 @@ export default function GoalCard({ data }) {
                             margin="normal"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            onSubmit={amount == ""}
                         />
                         <Button
                             variant="contained"
