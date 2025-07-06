@@ -7,6 +7,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTrans } from "../../store/thunk/Admin/AdminTransactionTrunk";
 import AdminTransferTransactionDetails from "./AdminTransferTransactionDetail";
+import { format, parse } from "date-fns";
 
 export default function AdminTransactionDetail() {
   const dispatch = useDispatch();
@@ -60,7 +61,7 @@ export default function AdminTransactionDetail() {
                         <TableCell>{tx.TYPE}</TableCell>
                         <TableCell>{parseFloat(tx.AMOUNT).toFixed(2)}</TableCell>
                         <TableCell>{tx.DESCRIPTION}</TableCell>
-                        <TableCell>{tx.TRANSACTIONDATE}</TableCell>
+                        <TableCell>{format(parse(tx.TRANSACTIONDATE, "dd-MMM-yy hh.mm.ss.SSSSSS a", new Date()),"dd MMM yyyy, hh:mm a")}</TableCell>
                         <TableCell>{tx.REFERENCENUMBER}</TableCell>
                         <TableCell>{tx.ACCOUNTID}</TableCell>
                       </HoverRow>

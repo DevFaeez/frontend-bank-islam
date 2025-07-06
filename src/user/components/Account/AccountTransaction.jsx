@@ -1,78 +1,11 @@
 import { Box, Modal, Typography } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TransferTransaction from "../Transaction/TransferTransaction";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
-
-const transactions = [
-    {
-        method: "MB DUITNOW",
-        recipient: "DESA NUR GROUP SDN. BHD.",
-        amount: -100.00
-    },
-    {
-        method: "MB FUND TRANSFER TO SAVINGS / CURRENT",
-        recipient: "MUHAMAD IZULDDIN BIN MOHD NASIR",
-        amount: -3500.00
-    },
-    {
-        method: "MB FUND TRANSFER TO SAVINGS / CURRENT",
-        recipient: "MUHAMAD IZULDDIN BIN MOHD NASIR",
-        amount: 5000.00
-    },
-    {
-        method: "IB FPX PAYMENT",
-        recipient: "DUITNOW ONLINE BANKING/WALLETS",
-        amount: -10.00
-    },
-    {
-        method: "IB FPX PAYMENT",
-        recipient: "DUITNOW ONLINE BANKING/WALLETS",
-        amount: -10.00
-    },
-    {
-        method: "MB DUITNOW",
-        recipient: "DESA NUR GROUP SDN. BHD.",
-        amount: -100.00
-    },
-    {
-        method: "MB FUND TRANSFER TO SAVINGS / CURRENT",
-        recipient: "MUHAMAD IZULDDIN BIN MOHD NASIR",
-        amount: -3500.00
-    },
-    {
-        method: "MB FUND TRANSFER TO SAVINGS / CURRENT",
-        recipient: "MUHAMAD IZULDDIN BIN MOHD NASIR",
-        amount: 5000.00
-    },
-    {
-        method: "IB FPX PAYMENT",
-        recipient: "DUITNOW ONLINE BANKING/WALLETS",
-        amount: -10.00
-    },
-    {
-        method: "MB DUITNOW",
-        recipient: "DESA NUR GROUP SDN. BHD.",
-        amount: -100.00
-    },
-    {
-        method: "MB FUND TRANSFER TO SAVINGS / CURRENT",
-        recipient: "MUHAMAD IZULDDIN BIN MOHD NASIR",
-        amount: -3500.00
-    },
-    {
-        method: "MB FUND TRANSFER TO SAVINGS / CURRENT",
-        recipient: "MUHAMAD IZULDDIN BIN MOHD NASIR",
-        amount: 5000.00
-    },
-    {
-        method: "IB FPX PAYMENT",
-        recipient: "DUITNOW ONLINE BANKING/WALLETS",
-        amount: -10.00
-    },
-];
+import LoanTransaction from "../Transaction/LoanTransaction";
 
 const style = {
     position: 'absolute',
@@ -121,7 +54,9 @@ export default function AccountTransaction() {
     }
 
     useEffect(() => {
-        dispatch(fetchAllTransaction());
+        console.log("loop here");
+        const accoundId = localStorage.getItem("accountId");
+        dispatch(fetchAllTransaction(accoundId));
     }, [])
 
     return (
@@ -133,7 +68,8 @@ export default function AccountTransaction() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <TransferTransaction />
+                    {/* <TransferTransaction /> */}
+                    <LoanTransaction />
                 </Box>
             </Modal>
             <div className="flex justify-between items-center pb-4">
@@ -142,12 +78,12 @@ export default function AccountTransaction() {
             </div>
             <div className="max-h-140 overflow-y-auto">
                 {
-                    [...transactionData]
+                    [...(Array.isArray(transactionData) ? transactionData : [])]
                         .sort((a, b) => parseCustomDate(b.TRANSACTIONDATE) - parseCustomDate(a.TRANSACTIONDATE))
                         .map((item) => (
                             <div
                                 onClick={() => handleClick(item.method)}
-                                className="flex justify-between items-center border-b-1 py-3 border-gray-300"
+                                className="flex justify-between items-center border-b-1 py-3 border-gray-300 cursor-pointer transition-colors duration-200 hover:bg-gray-200 hover:rounded-xl p-5 transition-all duration-100"
                                 key={item.TRANSACTIONID}
                             >
                                 <div className="flex flex-col gap-1">

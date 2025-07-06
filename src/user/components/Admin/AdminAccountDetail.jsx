@@ -20,7 +20,7 @@ export default function AdminAccountDetails() {
   const allUsers = useSelector((state) => state.adminUserDetail.data); // adjust state slice name
   const allTransaction = useSelector((state) => state.adminTransaction.data);
 
-  const allTransferTransaction = useSelector((state) => state.transferTransaction.data);
+  const allTransferTransaction = useSelector((state) => state.adminTranferTransaction.data);
   const allBillTransaction = useSelector((state) => state.bill.data);
 
     useEffect(() => {
@@ -32,38 +32,43 @@ export default function AdminAccountDetails() {
 
   // Line Chart
   const transactionVolumeData = useMemo(() => {
-    if (!allTransaction) return { dates: [], totals: [] };
+  if (!allTransaction) return { dates: [], totals: [] };
 
-    const grouped = {};
+  const grouped = {};
 
-    // Group transactions by date (yyyy-MM-dd)
-    allTransaction.forEach((tx) => {
-      try {
-        const parsedDate = parse(tx.TRANSACTIONDATE, "dd-MMM-yy", new Date());
-        const dateOnly = startOfDay(parsedDate);
-        const dateKey = format(dateOnly, "yyyy-MM-dd");
-        grouped[dateKey] = (grouped[dateKey] || 0) + 1;
-      } catch (error) {
-        console.warn("Invalid date:", tx.TRANSACTIONDATE);
-      }
-    });
+  allTransaction.forEach((tx) => {
+    try {
+      // console.log("Raw date:", tx.TRANSACTIONDATE);
 
-    // Generate last 30 days date range
-    const today = startOfDay(new Date());
-    const startDate = subDays(today, 29); // includes today
+      const parsedDate = parse(
+        tx.TRANSACTIONDATE,
+        "dd-MMM-yy hh.mm.ss.SSSSSS a",
+        new Date()
+      );
 
-    const allDates = eachDayOfInterval({ start: startDate, end: today });
+      console.log("Parsed:", parsedDate);
 
-    const result = {
-      dates: allDates,
-      totals: allDates.map((date) => {
-        const key = format(date, "yyyy-MM-dd");
-        return grouped[key] || 0;
-      }),
-    };
+      const dateOnly = startOfDay(parsedDate);
+      const dateKey = format(dateOnly, "yyyy-MM-dd");
+      grouped[dateKey] = (grouped[dateKey] || 0) + 1;
+    } catch (error) {
+      console.warn("Invalid date:", tx.TRANSACTIONDATE);
+    }
+  });
 
-    return result;
-  }, [allTransaction]);
+  const today = startOfDay(new Date());
+  const startDate = subDays(today, 29);
+  const allDates = eachDayOfInterval({ start: startDate, end: today });
+
+  return {
+    dates: allDates,
+    totals: allDates.map((date) => {
+      const key = format(date, "yyyy-MM-dd");
+      return grouped[key] || 0;
+    }),
+  };
+}, [allTransaction]);
+
 
 
   // Bar Chart
@@ -71,12 +76,16 @@ export default function AdminAccountDetails() {
   if (!Array.isArray(allTransferTransaction) || !Array.isArray(allBillTransaction)) return [0, 0, 0];
 
   const transferCount = allTransferTransaction.filter(
+
+    
     (tx) => tx.TYPE?.toLowerCase() === 'transfer'
   ).length;
 
   const billCount = allBillTransaction.length;
 
   const loanCount = 0; // or set manually for now
+
+  
 
   return [transferCount, billCount, loanCount];
 }, [allTransferTransaction, allBillTransaction]);

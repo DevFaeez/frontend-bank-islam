@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { fetchAllBillTrans, fetchBill } from "../../store/thunk/Billthunk";
+import { format, parse } from "date-fns";
 
 export default function AdminBillTransactionDetails() {
   const dispatch = useDispatch();
@@ -76,8 +77,7 @@ export default function AdminBillTransactionDetails() {
                   <TableCell>{tx.NAME}</TableCell>
                   <TableCell>{tx.PROVIDERTYPEID}</TableCell>
                   <TableCell>{tx.REFERENCENUMBER}</TableCell>
-                  <TableCell>{tx.TRANSACTIONDATE}</TableCell>
-                
+                  <TableCell>{format(parse(tx.TRANSACTIONDATE, "dd-MMM-yy hh.mm.ss.SSSSSS a", new Date()),"dd MMM yyyy, hh:mm a")}</TableCell>
                 </HoverRow>
               ))
             )}

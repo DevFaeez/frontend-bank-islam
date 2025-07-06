@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { fetchAllTransfer } from "../../store/thunk/Admin/AdminTransferTransactionTrunk";
+import { format, parse } from "date-fns";
 
 export default function AdminTranferTransactionDetails() {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ export default function AdminTranferTransactionDetails() {
   const isActive = (path) => location.pathname === path;
   const navigate = useNavigate();
 
-  const { data: transferTransaction = [], loading, error } = useSelector(state => state.transferTransaction || {});
+  const { data: transferTransaction = [], loading, error } = useSelector(state => state.adminTranferTransaction || {});
 
   const HeaderCell = styled(TableCell)(
     {
@@ -75,7 +76,7 @@ export default function AdminTranferTransactionDetails() {
                   <TableCell>{tx.TRANSFERMODE}</TableCell>
                   <TableCell>{tx.DESCRIPTION}</TableCell>
                   <TableCell>{tx.AMOUNT}</TableCell>
-                  <TableCell>{tx.TRANSACTIONDATE}</TableCell>
+                  <TableCell>{format(parse(tx.TRANSACTIONDATE, "dd-MMM-yy hh.mm.ss.SSSSSS a", new Date()),"dd MMM yyyy, hh:mm a")}</TableCell>
                   <TableCell>{tx.RECEIVERACCOUNT}</TableCell>
                   <TableCell>{tx.REFERENCENUMBER}</TableCell>
                   <TableCell>{tx.STATUS}</TableCell>

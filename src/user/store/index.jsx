@@ -6,12 +6,12 @@ import { transferReducer } from "./slice/TransferSlice";
 import { goalAccountReducer } from "./slice/GoalAccountSlice";
 import { useReducer } from "react";
 import { userReducer } from "./slice/UserProfileSlice";
-import { adminTransactionReducer} from "./slice/Admin/AdminTransactionSlice";
 import { adminReducer } from "./slice/Admin/AdminProfileSlice";
 import { userDetailReducer } from "./slice/Admin/AdminUserDetailSlice";
 import { transferTransactionReducer } from "./slice/Admin/AdminTransferTransactionSlice";
 import { loanReducer } from "./slice/LoanSlice";
 import { transactionReducer } from "./slice/TransactionSlice";
+import { adminTransactionReducer } from "./slice/Admin/AdminTransactionSlice";
 
 const store = configureStore({
     reducer: {
@@ -19,17 +19,20 @@ const store = configureStore({
         dashboard: dashboardReducer,
         bill: billReducer,
         user: userReducer,
-        admin: adminReducer,
         goalAccount: goalAccountReducer,
         user: userReducer,
         adminUserDetail: userDetailReducer,
         loan: loanReducer,
-        transfer: transferReducer,
         transaction: transactionReducer,
+        
+        // admin
+        admin: adminReducer,
+        adminUserDetail: userDetailReducer,
         adminTransaction: adminTransactionReducer,
-        transferTransaction: transferTransactionReducer
-    }
+        adminTranferTransaction: transferTransactionReducer
+}
 })
+
 
 export {store}
 
