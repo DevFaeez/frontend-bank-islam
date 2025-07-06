@@ -13,4 +13,20 @@ export const fetchAdmin = createAsyncThunk(
       return rejectWithValue(error.response?.data || { message: "Unknown error" });
     }
   }
+)
+
+export const updateAdminProfile = createAsyncThunk(
+  "adminProfile/update",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${BASEURL}/Controller/AdminController.php?action=updateAdmin`,
+        userData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: "Unknown error" });
+    }
+  }
 );

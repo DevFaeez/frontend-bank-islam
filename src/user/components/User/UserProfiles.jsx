@@ -2,13 +2,16 @@ import { Card, CardContent, TextField, Typography, Button } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchUser, updateUserProfile } from "../../store/thunk/UserProfileThunk";
+import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
 
 export default function UserProfiles() {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     nricNumber: "",
-    phoneNumber: ""
+    phoneNumber: "",
+    address: "",
+    password: ""
   });
 
   const [originalData, setOriginalData] = useState(null);
@@ -21,7 +24,9 @@ export default function UserProfiles() {
     const accountId = localStorage.getItem("accountId");
     if (accountId) {
       dispatch(fetchUser(accountId));
+      dispatch(fetchAllTransaction(accountId));
     }
+    
   }, [dispatch]);
 
   useEffect(() => {
@@ -30,7 +35,9 @@ export default function UserProfiles() {
         fullName: user.fullName || "",
         email: user.email || "",
         nricNumber: user.nricNumber || "",
-        phoneNumber: user.phoneNumber || ""
+        phoneNumber: user.phoneNumber || "",
+        address: user.address || "",
+        password: user.password || ""
       };
       setFormData(newData);
       setOriginalData(newData); // store original to restore later if cancelled
@@ -40,7 +47,7 @@ export default function UserProfiles() {
   const [validationErrors, setValidationErrors] = useState({});
 
 
- const handleUpdate = async () => {
+  const handleUpdate = async () => {
   const accountId = localStorage.getItem("accountId");
 
   const errors = {};
@@ -53,6 +60,8 @@ export default function UserProfiles() {
   }
 
   if (!formData.phoneNumber.trim()) errors.phoneNumber = "Phone Number is required";
+  if (!formData.address.trim()) errors.address = "Address is required";
+  if (!formData.password.trim()) errors.password = "Password is required";
 
   if (Object.keys(errors).length > 0) {
     setValidationErrors(errors);
@@ -104,24 +113,33 @@ export default function UserProfiles() {
         </div>
       </div>
 
-      <TextField
+     <TextField
   fullWidth
   label="Full Name"
   value={formData.fullName}
   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-  inputProps={{ readOnly: !isEditing }}
+  inputProps={{
+    readOnly: !isEditing,
+    tabIndex: !isEditing ? -1 : 0,
+    style: !isEditing ? { cursor: "default" } : {}
+  }}
   error={!!validationErrors.fullName}
   helperText={validationErrors.fullName}
   margin="normal"
   InputLabelProps={{ sx: { fontSize: "18px", fontWeight: "bold" } }}
 />
 
+
 <TextField
   fullWidth
   label="Email"
   value={formData.email}
   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-  inputProps={{ readOnly: !isEditing }}
+  inputProps={{
+  readOnly: !isEditing,
+  tabIndex: !isEditing ? -1 : 0,        // Prevent focus
+  style: !isEditing ? { cursor: "default" } : {}, // Remove text cursor
+}}
   error={!!validationErrors.email}
   helperText={validationErrors.email}
   margin="normal"
@@ -133,7 +151,11 @@ export default function UserProfiles() {
   fullWidth
   label="NRIC Number"
   value={formData.nricNumber}
-  inputProps={{ readOnly: true }}
+  inputProps={{
+  readOnly: !isEditing,
+  tabIndex: !isEditing ? -1 : 0,        // Prevent focus
+  style: !isEditing ? { cursor: "default" } : {cursor: "default"}, // Remove text cursor
+}}
   margin="normal"
   InputLabelProps={{ sx: { fontSize: "18px", fontWeight: "bold" } }}
 />
@@ -141,14 +163,57 @@ export default function UserProfiles() {
 <TextField
   fullWidth
   label="Phone Number"
+  type="tel"
   value={formData.phoneNumber}
-  onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-  inputProps={{ readOnly: !isEditing }}
+  onChange={(e) => {
+    const onlyNums = e.target.value.replace(/[^0-9]/g, ""); // Remove non-numeric
+    setFormData({ ...formData, phoneNumber: onlyNums });
+  }}
+  inputProps={{
+    readOnly: !isEditing,
+    tabIndex: !isEditing ? -1 : 0,
+    style: !isEditing ? { cursor: "default" } : {},
+    maxLength: 11 // optional: limit to 10-11 digits
+  }}
   error={!!validationErrors.phoneNumber}
   helperText={validationErrors.phoneNumber}
   margin="normal"
   InputLabelProps={{ sx: { fontSize: "18px", fontWeight: "bold" } }}
 />
+
+ <TextField
+  fullWidth
+  label="Address"
+  value={formData.address}
+  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+  inputProps={{
+    readOnly: !isEditing,
+    tabIndex: !isEditing ? -1 : 0,
+    style: !isEditing ? { cursor: "default" } : {}
+  }}
+  error={!!validationErrors.address}
+  helperText={validationErrors.address}
+  margin="normal"
+  InputLabelProps={{ sx: { fontSize: "18px", fontWeight: "bold" } }}
+/>
+ <TextField
+  fullWidth
+  label="Password"
+  type={isEditing ? "text" : "password"} // Use password type
+  value={isEditing ? formData.password : "********"} // Show asterisks when not editing
+  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+  inputProps={{
+    readOnly: !isEditing,
+    tabIndex: !isEditing ? -1 : 0,
+    style: !isEditing ? { cursor: "default" } : {}
+  }}
+  error={!!validationErrors.password}
+  helperText={validationErrors.password}
+  margin="normal"
+  InputLabelProps={{ sx: { fontSize: "18px", fontWeight: "bold" } }}
+/>
+
+
 
     </div>
   );

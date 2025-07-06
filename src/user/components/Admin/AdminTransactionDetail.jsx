@@ -1,19 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, styled, Button,
-  Typography
+  TableHead, TableRow, Paper, styled,
+  Typography, TextField, TablePagination
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTrans } from "../../store/thunk/Admin/AdminTransactionTrunk";
-import AdminTransferTransactionDetails from "./AdminTransferTransactionDetail";
 import { format, parse } from "date-fns";
 
 export default function AdminTransactionDetail() {
   const dispatch = useDispatch();
-  const [activeView, setActiveView] = useState("list"); // 'list', 'transfer', 'bill', 'loan'
+  const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 10;
 
-  const { data: transactions = [], loading, error } = useSelector(state => state.adminTransaction || {});
+  const { data: transactions = [], loading, error } = useSelector(
+    (state) => state.adminTransaction || {}
+  );
 
   const HeaderCell = styled(TableCell)({
     color: "white",
@@ -24,17 +27,60 @@ export default function AdminTransactionDetail() {
     '&:hover td': {
       backgroundColor: '#f2dbe1',
       color: '#c41b49',
-      },
-    }));
+    },
+  }));
 
   useEffect(() => {
     dispatch(fetchAllTrans());
   }, [dispatch]);
 
-  return (
-    <div className="bg-white p-8 rounded-2xl w-full ">
+  // Filter logic using useMemo for better performance
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter(tx => {
+      const search = searchTerm.toLowerCase();
+      return (
+        tx.TYPE?.toLowerCase().includes(search) ||
+        tx.DESCRIPTION?.toLowerCase().includes(search) ||
+        tx.REFERENCENUMBER?.toString().includes(search) ||
+        tx.ACCOUNTID?.toString().includes(search)
+      );
+    });
+  }, [transactions, searchTerm]);
 
-      <Typography variant="body2" fontSize={12} fontWeight={"bold"} sx={{color: "#DC2A54"}} paddingBottom={'16px'}>T R A N S A C T I O N S&nbsp;&nbsp;&nbsp; R E C O R D</Typography>
+  // Paginated results
+  const paginatedTransactions = filteredTransactions.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  return (
+    <div className="bg-white p-8 rounded-2xl w-full">
+      <Typography
+        variant="body2"
+        fontSize={12}
+        fontWeight={"bold"}
+        sx={{ color: "#DC2A54" }}
+        paddingBottom={"16px"}
+      >
+        T R A N S A C T I O N S&nbsp;&nbsp;&nbsp; R E C O R D
+      </Typography>
+
+      {/* Search Field */}
+      <TextField
+        label="Search Transactions"
+        variant="outlined"
+        fullWidth
+        size="small"
+        sx={{ mb: 2 }}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          setPage(0); // reset to first page
+        }}
+      />
 
      <TableContainer component={Paper}>
               <Table>
