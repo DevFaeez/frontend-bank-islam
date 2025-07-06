@@ -44,9 +44,10 @@ export default function AdminPage() {
         </div>
 
         {/* Display Area */}
-        <div className="w-full h-full flex justify-center items-center px-6">
-            <Outlet/>
+        <div className="w-full h-full p-6 overflow-y-auto">
+          <Outlet />
         </div>
+
       </div>
     </div>
   );

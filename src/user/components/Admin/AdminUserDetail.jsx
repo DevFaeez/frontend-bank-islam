@@ -13,7 +13,7 @@ export default function AdminUserDetail() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
-  const rowsPerPage = 10;
+  const rowsPerPage = 7;
 
   const HeaderCell = styled(TableCell)({ color: "white", fontWeight: "bold" });
   const HoverRow = styled(TableRow)(({ theme }) => ({
@@ -50,7 +50,7 @@ export default function AdminUserDetail() {
   const paginatedUsers = filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <div className="bg-white p-8 rounded-2xl w-full">
+    <div className="bg-white px-8 pt-4 py-2 rounded-2xl w-full h-full flex flex-col overflow-y-auto">
       <Typography variant="body2" fontSize={15} fontWeight={"bold"} sx={{ color: "#DC2A54" }} paddingBottom={'16px'}>
         U S E R &nbsp;&nbsp; M A N A G E M E N T
       </Typography>
