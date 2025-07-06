@@ -18,8 +18,8 @@ export default function App() {
   return (
     <ThemeProvider theme={lightTheme}>
       <CssBaseline />
-      <AccountTransaction />
-      {/* <AppRoutes /> */}
+      {/* <AccountTransaction /> */}
+      <AppRoutes />
       {/* <TransferTransaction /> */}
       {/* <AccountTransaction /> */}
     </ThemeProvider>

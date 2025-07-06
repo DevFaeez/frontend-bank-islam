@@ -27,7 +27,7 @@ const transactionSlices = createSlice({
             .addCase(fetchAllTransaction.fulfilled, (state, action) => {
                 console.log("fetchAllTransaction fulfilled", action.payload);
                 state.loading = false;
-                state.transactionData = action.payload.data;
+                state.transactionData = action.payload.data || [];
             })
 
     }

@@ -5,10 +5,10 @@ import { billReducer } from "./slice/BillSlice";
 import { transferReducer } from "./slice/TransferSlice";
 import { goalAccountReducer } from "./slice/GoalAccountSlice";
 import { userReducer } from "./slice/UserProfileSlice";
-import { transactionReducer } from "./slice/Admin/AdminTransactionSlice";
 import { adminReducer } from "./slice/Admin/AdminProfileSlice";
 import { userDetailReducer } from "./slice/Admin/AdminUserDetailSlice";
 import { loanReducer } from "./slice/LoanSlice";
+import { transactionReducer } from "./slice/TransactionSlice";
 
 const store = configureStore({
 reducer: {
@@ -19,9 +19,9 @@ reducer: {
         goalAccount: goalAccountReducer,
         user: userReducer,
         loan: loanReducer,
-        transaction: transactionReducer,
         admin: adminReducer,
-        adminUserDetail: userDetailReducer
+        adminUserDetail: userDetailReducer,
+        transaction: transactionReducer
 }
 })
 

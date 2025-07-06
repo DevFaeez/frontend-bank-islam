@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import TransferTransaction from "../Transaction/TransferTransaction";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
+import LoanTransaction from "../Transaction/LoanTransaction";
 
 const style = {
     position: 'absolute',
@@ -52,7 +53,9 @@ export default function AccountTransaction() {
     }
 
     useEffect(() => {
-        dispatch(fetchAllTransaction());
+        console.log("loop here");
+        const accoundId = localStorage.getItem("accountId");
+        dispatch(fetchAllTransaction(accoundId));
     }, [])
 
     return (
@@ -64,7 +67,8 @@ export default function AccountTransaction() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <TransferTransaction />
+                    {/* <TransferTransaction /> */}
+                    <LoanTransaction />
                 </Box>
             </Modal>
             <div className="flex justify-between items-center pb-4">
@@ -73,7 +77,7 @@ export default function AccountTransaction() {
             </div>
             <div className="max-h-140 overflow-y-auto">
                 {
-                    [...transactionData]
+                    [...(Array.isArray(transactionData) ? transactionData : [])]
                         .sort((a, b) => parseCustomDate(b.TRANSACTIONDATE) - parseCustomDate(a.TRANSACTIONDATE))
                         .map((item) => (
                             <div
