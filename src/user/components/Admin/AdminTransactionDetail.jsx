@@ -36,7 +36,7 @@ export default function AdminTransactionDetail() {
 
       <Typography variant="body2" fontSize={12} fontWeight={"bold"} sx={{color: "#DC2A54"}} paddingBottom={'16px'}>T R A N S A C T I O N S&nbsp;&nbsp;&nbsp; R E C O R D</Typography>
 
-      <TableContainer component={Paper}>
+     <TableContainer component={Paper}>
               <Table>
                 <TableHead sx={{ backgroundColor: "#dc2a54" }}>
                   <TableRow>

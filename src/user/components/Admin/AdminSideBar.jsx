@@ -19,7 +19,7 @@ export default function AdminSideBar() {
     return(
         <div className="flex flex-col items-center justify-center w-fit p-5 rounded-2xl shadow-2xl">
             <div className="py-1.5">
-               <Tooltip title="Admin Dashboard" placement="right">
+                <Tooltip title="Admin Dashboard" placement="right">
                 <IconButton onClick={() => navigate("/admin/dashboard")}>
                     <DashboardOutlinedIcon sx={{ color: isActive("/admin/dashboard") ? "#DC2A54" : "gray", fontSize: "37px" }} />
                 </IconButton>

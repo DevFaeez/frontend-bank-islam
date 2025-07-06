@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { Typography } from "@mui/material";
-import { fetchAdmin } from "../../store/thunk/Admin/AdminProfileTrunk";
 import Box from "@mui/material/Box";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { LineChart } from "@mui/x-charts/LineChart";
@@ -23,11 +22,11 @@ export default function AdminAccountDetails() {
   const allTransferTransaction = useSelector((state) => state.adminTranferTransaction.data);
   const allBillTransaction = useSelector((state) => state.bill.data);
 
-    useEffect(() => {
-  dispatch(fetchAllUser());
-  dispatch(fetchAllTrans());
-  dispatch(fetchAllTransfer());
-  dispatch(fetchAllBillTrans());
+  useEffect(() => {
+    dispatch(fetchAllUser());
+    dispatch(fetchAllTrans());
+    dispatch(fetchAllTransfer());
+    dispatch(fetchAllBillTrans());
 }, [dispatch]);
 
   // Line Chart
@@ -90,11 +89,8 @@ export default function AdminAccountDetails() {
   return [transferCount, billCount, loanCount];
 }, [allTransferTransaction, allBillTransaction]);
 
-
-
-
   return (
-    <div className="bg-white p-8 rounded-2xl w-full">
+    <div className="bg-white px-8 py-6 rounded-2xl w-full">
       <Typography variant="body2" fontSize={15} fontWeight={"bold"} sx={{ color: "#DC2A54" }} paddingBottom={"16px"}>
         A D M I N&nbsp;&nbsp;&nbsp; D A S H B O A R D
       </Typography>

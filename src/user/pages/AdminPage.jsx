@@ -44,12 +44,8 @@ export default function AdminPage() {
         </div>
 
         {/* Display Area */}
-        <div className="w-full bg-gray-200 p-8 m-6  shadow overflow-y-auto">
-          <div className="text-xl font-semibold"></div>
-          <div className=" w-full h-100 mt-10 rounded-xl">
+        <div className="w-full h-full flex justify-center items-center px-6">
             <Outlet/>
-          </div>
-
         </div>
       </div>
     </div>
