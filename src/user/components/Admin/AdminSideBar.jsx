@@ -9,7 +9,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 import SyncAltOutlinedIcon from '@mui/icons-material/SyncAltOutlined';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 export default function AdminSideBar() {
 
@@ -37,7 +38,7 @@ export default function AdminSideBar() {
             <div className="py-1.5">
                 <Tooltip title="User Management" placement="right">
                     <IconButton onClick={() => navigate("/admin/management")}>
-                        <PersonAddIcon sx={{color: isActive("/admin/management") ? "#DC2A54" : "gray", fontSize: "37px"}} />
+                        <PersonAddAlt1Icon sx={{color: isActive("/admin/management") ? "#DC2A54" : "gray", fontSize: "37px"}} />
                     </IconButton>
                 </Tooltip>
             </div>
@@ -45,6 +46,13 @@ export default function AdminSideBar() {
                 <Tooltip title="Transaction Management" placement="right">
                     <IconButton onClick={() => navigate("/admin/transaction")}>
                         <SyncAltOutlinedIcon sx={{color: isActive("/admin/transaction") ? "#DC2A54" : "gray", fontSize: "37px"}} />
+                    </IconButton>
+                </Tooltip>
+            </div>
+            <div className="py-1.5">
+                <Tooltip title="Approve Loan" placement="right">
+                    <IconButton onClick={() => navigate("/admin/loanapproval")}>
+                        <FactCheckIcon sx={{color: isActive("/admin/loanapproval") ? "#DC2A54" : "gray", fontSize: "37px"}} />
                     </IconButton>
                 </Tooltip>
             </div>
