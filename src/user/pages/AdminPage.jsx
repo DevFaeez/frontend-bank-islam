@@ -15,7 +15,7 @@ export default function AdminPage() {
     const isActive = (path) => location.pathname === path;
     const navigate = useNavigate();
 
-     return (
+    return (
     <div className="h-screen w-full flex flex-col bg-gray-100">
       {/* Header */}
       <div

@@ -10,6 +10,7 @@ import { transferTransactionReducer } from "./slice/Admin/AdminTransferTransacti
 import { loanReducer } from "./slice/LoanSlice";
 import { transactionReducer } from "./slice/TransactionSlice";
 import { adminTransactionReducer } from "./slice/Admin/AdminTransactionSlice";
+import { loanApprovaReducer } from "./slice/Admin/ApprovalLoanSlice";
 
 const store = configureStore({
     reducer: {
@@ -25,7 +26,8 @@ const store = configureStore({
         admin: adminReducer,
         adminUserDetail: userDetailReducer,
         adminTransaction: adminTransactionReducer,
-        adminTranferTransaction: transferTransactionReducer
+        adminTranferTransaction: transferTransactionReducer,
+        adminLoanApproval: loanApprovaReducer
 }
 })
 

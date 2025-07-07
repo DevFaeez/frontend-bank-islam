@@ -4,6 +4,8 @@ import AdminAccountDetails from "../user/components/Admin/AdminAccountDetail";
 import AdminProfile from "../user/components/Admin/AdminProfile";
 import AdminUserDetail from "../user/components/Admin/AdminUserDetail";
 import AdminTransactionManagement from "../user/components/Admin/AdminTransactionManagement";
+import AdminLoanApprover from "../user/components/Admin/AdminLoanApproval";
+import AdminLoanApproval from "../user/components/Admin/AdminLoanApproval";
 
 export default function AdminRoute() {
     return (
@@ -15,6 +17,7 @@ export default function AdminRoute() {
                 <Route path="profile" element={<AdminProfile />} />
                 <Route path="userDetail" element={<AdminUserDetail />} />
                 <Route path="transaction" element={<AdminTransactionManagement />} />
+                <Route path="loanapproval" element={<AdminLoanApproval />} />
             </Route>
         </Routes>
     );
