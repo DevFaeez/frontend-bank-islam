@@ -1,9 +1,9 @@
 import * as Yup from "yup";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, MenuItem, TextField, Typography } from "@mui/material";
 import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { registerAdmin } from "../../store/thunk/Admin/AdminProfileTrunk";
+import { registerAdmin } from "../../store/thunk/Admin/AdminUserManagementTrunk";
 
 const initialValue = {
   username: "",
@@ -27,11 +27,11 @@ const validationSchema = Yup.object().shape({
   managerId: Yup.string().nullable(),
 });
 
-const AdminRegister = () => {
+const AdminRegister = ({onSuccess }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleSubmit = async (values) => {
+ const handleSubmit = async (values) => {
     try {
       const adminData = {
         username: values.username,
@@ -46,13 +46,11 @@ const AdminRegister = () => {
       const result = await dispatch(registerAdmin(adminData)).unwrap();
 
       if (result?.result === "success") {
-        alert("Admin registration successful!");
-          navigate("/admin/management");
-        } else {
-          console.log("Backend returned but not success:", result);
-          alert(result?.message || "Registration failed");
-        }
-
+        if (onSuccess) onSuccess();
+      } else {
+        console.log("Backend returned but not success:", result);
+        alert(result?.message || "Registration failed");
+      }
     } catch (error) {
       console.error("Registration error", error);
       alert("An unexpected error occurred.");
@@ -60,11 +58,11 @@ const AdminRegister = () => {
   };
 
   return (
-    <div className="p-10 w-[500px] rounded-md shadow-xl bg-white/20 backdrop-blur-[8px]">
+    <div className="p-5 w-full rounded-md shadow-xl bg-white backdrop-blur-[8px]">
       <Typography
-        variant="h4"
+        fontSize={15}
         color="primary"
-        sx={{ textAlign: "center", fontWeight: "bold", padding: "10px" }}
+        sx={{ textAlign: "center", fontWeight: "bold", padding: "5px" }}
       >
         Register New User
       </Typography>
@@ -127,9 +125,9 @@ const AdminRegister = () => {
               helperText={touched.role && errors.role}
               error={touched.role && Boolean(errors.role)}
             >
-              <option value="Admin">Admin</option>
-              <option value="Manager">Manager</option>
-              <option value="Staff">Staff</option>
+              <MenuItem value="Admin">Admin</MenuItem>
+              <MenuItem value="Manager">Manager</MenuItem>
+              <MenuItem value="Staff">Staff</MenuItem>
             </Field>
             <Field
               as={TextField}
@@ -142,8 +140,8 @@ const AdminRegister = () => {
               helperText={touched.status && errors.status}
               error={touched.status && Boolean(errors.status)}
             >
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
+              <MenuItem value="Active">Active</MenuItem>
+              <MenuItem value="Inactive">Inactive</MenuItem>
             </Field>
             <Field
               as={TextField}

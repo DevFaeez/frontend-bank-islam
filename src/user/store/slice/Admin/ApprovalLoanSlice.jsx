@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { downloadLoanData, fetchAllLoan, updateLoanStatus } from "../../thunk/Admin/ApprovalSliceThunk";
+import { downloadLoanData, fetchAllLoan, fetchAllLoanTrans, updateLoanStatus } from "../../thunk/Admin/ApprovalSliceThunk";
 
 
 const loanApprovalSlice = createSlice({
@@ -29,7 +29,11 @@ const loanApprovalSlice = createSlice({
                 state.loading = false;
                 state.loanData = action.payload.data || [];
             })
-
+            .addCase(fetchAllLoanTrans.fulfilled, (state, action) => {
+                console.log("fetchAllLoanTrans fulfilled", action.payload);
+                state.loading = false;
+                state.loanData = action.payload.data || [];
+            })
             .addCase(updateLoanStatus.pending, (state) => {
                 console.log("updateLoanStatus pending");
                 state.loading = true;
