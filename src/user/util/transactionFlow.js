@@ -21,7 +21,7 @@ export function transactionFlow(data) {
     return data
         .map(item => {
             const paymentDesc = item.DESCRIPTION;
-            const amount = item.AMOUNT;
+            const amount =  item.TYPE === "LoanPayment" ? item.PAYAMOUNT : item.AMOUNT;
             const type = item.TYPE;
             const date = item.TRANSACTIONDATE;
 

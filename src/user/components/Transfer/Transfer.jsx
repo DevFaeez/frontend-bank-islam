@@ -53,7 +53,7 @@ const handleSubmit = async (values, { resetForm }) => {
     let timerInterval;
     Swal.fire({
         html: "Authenticating transfer in <b></b> milliseconds...",
-        timer: 1500,
+        timer: 800,
         timerProgressBar: true,
         didOpen: () => {
             Swal.showLoading();

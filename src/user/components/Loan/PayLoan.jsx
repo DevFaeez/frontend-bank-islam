@@ -46,7 +46,7 @@ export default function PayLoan() {
         let timerInterval;
         Swal.fire({
             html: "Authenticating payment in <b></b> milliseconds...",
-            timer: 1500,
+            timer: 800,
             timerProgressBar: true,
             didOpen: () => {
                 Swal.showLoading();

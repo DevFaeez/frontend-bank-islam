@@ -64,7 +64,7 @@ export default function BillPayment() {
         let timerInterval;
             Swal.fire({
                 html: "Authenticating bill payment in <b></b> milliseconds...",
-                timer: 1500,
+                timer: 800,
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading();

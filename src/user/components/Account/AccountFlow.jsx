@@ -13,6 +13,7 @@ export default function AccountFlow() {
 
     const transactionData = useSelector(state => state.transaction.transactionData);
     const transactionFormated = transactionFlow(transactionData);
+    console.log("transaction formatted", transactionFormated);
     console.log(transactionFormated)
     const totalIn = transactionFormated
         .filter((t) => t.flow === "in")
@@ -59,7 +60,7 @@ export default function AccountFlow() {
                     July 2025
                 </Typography>
                 <Typography fontSize={"11px"} sx={{ textAlign: "center", color: "#FFD354", fontWeight: "bold" }}>
-                    Total In: RM{totalIn.toFixed(2)}
+                    ∑ In: RM{totalIn.toFixed(2)}
                 </Typography>
                 <Typography fontSize={"11px"} sx={{ textAlign: "center", color: "#F14F75", fontWeight: "bold" }}>
                     ∑ Out: RM{totalOut.toFixed(2)}

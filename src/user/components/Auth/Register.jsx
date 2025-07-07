@@ -53,7 +53,7 @@ const Register = () => {
                     icon: "success",
                     title: "Registration Success",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 800
                 });
                 localStorage.setItem("accountId", payload.data.accountId)
                 navigate("/dashboard");

@@ -99,7 +99,7 @@ export default function CreateLoan() {
                 icon: "success",
                 title: "Success Submit the loan",
                 showConfirmButton: false,
-                timer: 1500
+                timer: 800
             });
             resetForm();
             setSuccessUploadPaySlip([]);
