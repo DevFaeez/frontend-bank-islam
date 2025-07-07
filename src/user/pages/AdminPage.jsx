@@ -2,6 +2,7 @@
 import { Divider, IconButton, Grid } from "@mui/material";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AdminSideBar from "../components/Admin/AdminSideBar";
 import AdminAccountDetails from "../components/Admin/AdminAccountDetail";
 import AdminTransferDetails from "../components/Admin/AdminTransactionDetail";
@@ -14,6 +15,11 @@ export default function AdminPage() {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
     const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/");
+        localStorage.removeItem("accountId");
+    }
 
      return (
     <div className="h-screen w-full flex flex-col bg-gray-100">
@@ -29,12 +35,13 @@ export default function AdminPage() {
 
         <div>
           <IconButton onClick={() => navigate('/admin/profile')}>
-            <AccountCircleIcon sx={{ fontSize: 40, color: "white" }} color="primary" />
+            <AccountCircleIcon sx={{ fontSize: 35, color: "white" }} color="primary" />
+          </IconButton>
+          <IconButton onClick={handleClick}>
+            <ExitToAppIcon sx={{ fontSize: 35, color: "white" }} color="primary" />
           </IconButton>
         </div>
       </div>
-
-      
 
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden">

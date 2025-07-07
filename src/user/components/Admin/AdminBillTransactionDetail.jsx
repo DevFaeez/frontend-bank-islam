@@ -81,13 +81,12 @@ export default function AdminBillTransactionDetails() {
           <TableHead sx={{ backgroundColor: "#dc2a54", color: "white" }}>
             <TableRow>
               <HeaderCell>Transaction ID</HeaderCell>
-              <HeaderCell>Bill ID</HeaderCell>
-              <HeaderCell>Bill Type ID</HeaderCell>
+              <HeaderCell>Bill Type</HeaderCell>
+              <HeaderCell>Provider Type</HeaderCell>
               <HeaderCell>Description</HeaderCell>
-              <HeaderCell>Name</HeaderCell>
-              <HeaderCell>Provider Type ID</HeaderCell>
               <HeaderCell>Reference Number</HeaderCell>
               <HeaderCell>Transaction Date</HeaderCell>
+              <HeaderCell>Bill ID</HeaderCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -99,15 +98,14 @@ export default function AdminBillTransactionDetails() {
               paginatedBills.map((tx) => (
                 <HoverRow key={tx.TRANSACTIONID}>
                   <TableCell>{tx.TRANSACTIONID}</TableCell>
-                  <TableCell>{tx.BILLID}</TableCell>
-                  <TableCell>{tx.BILLTYPEID}</TableCell>
+                  <TableCell>{tx.BILLTYPENAME}</TableCell>
+                  <TableCell>{tx.PROVIDERNAME}</TableCell>
                   <TableCell>{tx.DESCRIPTION}</TableCell>
-                  <TableCell>{tx.NAME}</TableCell>
-                  <TableCell>{tx.PROVIDERTYPEID}</TableCell>
                   <TableCell>{tx.REFERENCENUMBER}</TableCell>
                   <TableCell>
                     {format(parse(tx.TRANSACTIONDATE, "dd-MMM-yy hh.mm.ss.SSSSSS a", new Date()), "dd MMM yyyy, hh:mm a")}
                   </TableCell>
+                  <TableCell>{tx.BILLID}</TableCell>
                 </HoverRow>
               ))
             )}

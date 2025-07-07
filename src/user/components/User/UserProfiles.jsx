@@ -1,7 +1,7 @@
-import { Card, CardContent, TextField, Typography, Button } from "@mui/material";
+import { Card, CardContent, TextField, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { fetchUser, updateUserProfile } from "../../store/thunk/UserProfileThunk";
+import { fetchUser, updateUserPassword, updateUserProfile } from "../../store/thunk/UserProfileThunk";
 import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
 
 export default function UserProfiles() {
@@ -11,11 +11,19 @@ export default function UserProfiles() {
     nricNumber: "",
     phoneNumber: "",
     address: "",
-    password: ""
   });
 
   const [originalData, setOriginalData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  const [passwordFields, setPasswordFields] = useState({
+  currentPassword: "",
+  newPassword: "",
+  confirmNewPassword: ""
+  });
+
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.data);
@@ -26,7 +34,6 @@ export default function UserProfiles() {
       dispatch(fetchUser(accountId));
       dispatch(fetchAllTransaction(accountId));
     }
-    
   }, [dispatch]);
 
   useEffect(() => {
@@ -36,65 +43,101 @@ export default function UserProfiles() {
         email: user.email || "",
         nricNumber: user.nricNumber || "",
         phoneNumber: user.phoneNumber || "",
-        address: user.address || "",
-        password: user.password || ""
+        address: user.address || ""
       };
       setFormData(newData);
-      setOriginalData(newData); // store original to restore later if cancelled
+      setOriginalData(newData);
     }
   }, [user]);
 
-  const [validationErrors, setValidationErrors] = useState({});
-
 
   const handleUpdate = async () => {
-  const accountId = localStorage.getItem("accountId");
+    const accountId = localStorage.getItem("accountId");
 
-  const errors = {};
+    const errors = {};
+    if (!formData.fullName.trim()) errors.fullName = "Full Name is required";
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
+      errors.email = "Invalid email format";
+    }
+    if (!formData.phoneNumber.trim()) errors.phoneNumber = "Phone Number is required";
+    if (!formData.address.trim()) errors.address = "Address is required";
 
-  if (!formData.fullName.trim()) errors.fullName = "Full Name is required";
-  if (!formData.email.trim()) {
-    errors.email = "Email is required";
-  } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
-    errors.email = "Invalid email format";
-  }
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
 
-  if (!formData.phoneNumber.trim()) errors.phoneNumber = "Phone Number is required";
-  if (!formData.address.trim()) errors.address = "Address is required";
-  if (!formData.password.trim()) errors.password = "Password is required";
+    const updatedData = { ...formData, accountId };
+    const resultAction = await dispatch(updateUserProfile(updatedData));
 
-  if (Object.keys(errors).length > 0) {
-    setValidationErrors(errors);
-    return;
-  }
+    if (updateUserProfile.fulfilled.match(resultAction)) {
+      alert("Profile updated successfully");
+      dispatch(fetchUser(accountId));
+      setIsEditing(false);
+    } else {
+      alert("Update failed: " + (resultAction.payload?.message || "Unknown error"));
+    }
+  };
 
-  setValidationErrors({}); 
-
-  const updatedData = { ...formData, accountId };
-  const resultAction = await dispatch(updateUserProfile(updatedData));
-
-  if (updateUserProfile.fulfilled.match(resultAction)) {
-    alert("Profile updated successfully");
-    dispatch(fetchUser(accountId));
+    const handleCancel = () => {
+    setFormData(originalData);
+    setValidationErrors({});
     setIsEditing(false);
-  } else {
-    alert("Update failed: " + (resultAction.payload?.message || "Unknown error"));
-  }
   };
 
-  const handleCancel = () => {
-  setFormData(originalData);   
-  setValidationErrors({});      
-  setIsEditing(false);          
+  const handleChangePassword = async () => {
+    const accountId = localStorage.getItem("accountId");
+    const { currentPassword, newPassword, confirmNewPassword } = passwordFields;
+
+    const errors = {};
+    if (!currentPassword.trim()) errors.currentPassword = "Current password is required";
+    if (!newPassword.trim()) errors.newPassword = "New password is required";
+    if (newPassword !== confirmNewPassword)
+      errors.confirmNewPassword = "Passwords do not match";
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    const resultAction = await dispatch(
+      updateUserPassword({ accountId, currentPassword, newPassword })
+    );
+
+    if (updateUserPassword.fulfilled.match(resultAction)) {
+      const { result, message } = resultAction.payload;
+      if (result === "fail") {
+        setValidationErrors({ currentPassword: message });
+        alert("Password update failed: " + message);
+      } else {
+        alert("Password updated successfully");
+        setShowPasswordModal(false);
+        setPasswordFields({
+          currentPassword: "",
+          newPassword: "",
+          confirmNewPassword: ""
+        });
+        setValidationErrors({});
+      }
+    } else {
+      alert("Password update failed: " + (resultAction.payload?.message || "Unknown error"));
+    }
   };
 
-  return (
+ return (
     <div className="bg-white p-8 rounded-2xl w-full">
       <div className="flex justify-between items-center pb-4">
-        <Typography variant="body2" fontSize={14} fontWeight={"bold"} sx={{color: "#DC2A54"}}>
+        <Typography variant="body2" fontSize={14} fontWeight={"bold"} sx={{ color: "#DC2A54" }}>
           U S E R &nbsp;&nbsp;&nbsp;I N F O R M A T I O N
         </Typography>
         <div className="flex gap-2">
+          {!isEditing && (
+            <Button variant="outlined" onClick={() => setShowPasswordModal(true)}>
+              Change Password
+            </Button>
+          )}
           {isEditing && (
             <Button variant="outlined" onClick={handleCancel}>
               Cancel
@@ -196,25 +239,54 @@ export default function UserProfiles() {
   margin="normal"
   InputLabelProps={{ sx: { fontSize: "18px", fontWeight: "bold" } }}
 />
- <TextField
-  fullWidth
-  label="Password"
-  type={isEditing ? "text" : "password"} // Use password type
-  value={isEditing ? formData.password : "********"} // Show asterisks when not editing
-  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-  inputProps={{
-    readOnly: !isEditing,
-    tabIndex: !isEditing ? -1 : 0,
-    style: !isEditing ? { cursor: "default" } : {}
-  }}
-  error={!!validationErrors.password}
-  helperText={validationErrors.password}
-  margin="normal"
-  InputLabelProps={{ sx: { fontSize: "18px", fontWeight: "bold" } }}
-/>
-
-
-
+  {/* Password Change Modal */}
+      <Dialog open={showPasswordModal} onClose={() => setShowPasswordModal(false)}>
+        <DialogTitle>Change Password</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Current Password"
+            type="password"
+            value={passwordFields.currentPassword}
+            onChange={(e) =>
+              setPasswordFields({ ...passwordFields, currentPassword: e.target.value })
+            }
+            error={!!validationErrors.currentPassword}
+            helperText={validationErrors.currentPassword}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="New Password"
+            type="password"
+            value={passwordFields.newPassword}
+            onChange={(e) =>
+              setPasswordFields({ ...passwordFields, newPassword: e.target.value })
+            }
+            error={!!validationErrors.newPassword}
+            helperText={validationErrors.newPassword}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Confirm New Password"
+            type="password"
+            value={passwordFields.confirmNewPassword}
+            onChange={(e) =>
+              setPasswordFields({ ...passwordFields, confirmNewPassword: e.target.value })
+            }
+            error={!!validationErrors.confirmNewPassword}
+            helperText={validationErrors.confirmNewPassword}
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowPasswordModal(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleChangePassword}>
+            Update Password
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

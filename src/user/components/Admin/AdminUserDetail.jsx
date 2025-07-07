@@ -52,7 +52,7 @@ export default function AdminUserDetail() {
   return (
     <div className="bg-white px-8 pt-4 py-2 rounded-2xl w-full h-full flex flex-col overflow-y-auto">
       <Typography variant="body2" fontSize={15} fontWeight={"bold"} sx={{ color: "#DC2A54" }} paddingBottom={'16px'}>
-        U S E R &nbsp;&nbsp; M A N A G E M E N T
+        C U S T O M E R &nbsp;&nbsp; M A N A G E M E N T
       </Typography>
 
       {/* Search */}

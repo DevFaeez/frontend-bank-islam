@@ -31,6 +31,22 @@ export const updateUserProfile = createAsyncThunk(
       return rejectWithValue(error.response?.data || { message: "Unknown error" });
     }
   }
+)
+
+export const updateUserPassword = createAsyncThunk(
+  "user/update",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${BASEURL}/Controller/userController.php?action=updateUserPassword`,
+        userData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { message: "Unknown error" });
+    }
+  }
 );
 
     

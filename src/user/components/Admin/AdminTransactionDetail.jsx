@@ -42,6 +42,7 @@ export default function AdminTransactionDetail() {
         tx.TYPE?.toLowerCase().includes(search) ||
         tx.DESCRIPTION?.toLowerCase().includes(search) ||
         tx.REFERENCENUMBER?.toString().includes(search) ||
+        tx.AMOUNT?.toString().includes(search) ||
         tx.ACCOUNTID?.toString().includes(search)
       );
     });
@@ -82,17 +83,15 @@ export default function AdminTransactionDetail() {
         }}
       />
 
-     <TableContainer component={Paper}>
+      <TableContainer component={Paper}>
               <Table>
                 <TableHead sx={{ backgroundColor: "#dc2a54" }}>
                   <TableRow>
-                    <HeaderCell>Transaction ID</HeaderCell>
+                    <HeaderCell>Reference Number</HeaderCell>
                     <HeaderCell>Type</HeaderCell>
                     <HeaderCell>Amount</HeaderCell>
                     <HeaderCell>Description</HeaderCell>
                     <HeaderCell>Transaction Date</HeaderCell>
-                    <HeaderCell>Reference Number</HeaderCell>
-                    <HeaderCell>Account ID</HeaderCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -101,15 +100,14 @@ export default function AdminTransactionDetail() {
                       <TableCell colSpan={7} align="center">No transactions found.</TableCell>
                     </TableRow>
                   ) : (
-                    transactions.map((tx) => (
+                    paginatedTransactions.map((tx) => (
+
                       <HoverRow key={tx.TRANSACTIONID}>
-                        <TableCell>{tx.TRANSACTIONID}</TableCell>
+                        <TableCell>{tx.REFERENCENUMBER}</TableCell>
                         <TableCell>{tx.TYPE}</TableCell>
                         <TableCell>{parseFloat(tx.AMOUNT).toFixed(2)}</TableCell>
                         <TableCell>{tx.DESCRIPTION}</TableCell>
                         <TableCell>{format(parse(tx.TRANSACTIONDATE, "dd-MMM-yy hh.mm.ss.SSSSSS a", new Date()),"dd MMM yyyy, hh:mm a")}</TableCell>
-                        <TableCell>{tx.REFERENCENUMBER}</TableCell>
-                        <TableCell>{tx.ACCOUNTID}</TableCell>
                       </HoverRow>
                     ))
                   )}

@@ -6,7 +6,6 @@ import TransferTransaction from "../Transaction/TransferTransaction";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTransaction } from "../../store/thunk/TransactionThunk";
 import LoanTransaction from "../Transaction/LoanTransaction";
-import BillTransaction from "../Transaction/BillTransaction";
 
 const style = {
     position: 'absolute',
@@ -20,7 +19,7 @@ const style = {
 };
 
 function parseCustomDate(dateStr) {
-    // console.log(dateStr);
+    console.log(dateStr);
     const monthMap = {
         JAN: '01', FEB: '02', MAR: '03', APR: '04',
         MAY: '05', JUN: '06', JUL: '07', AUG: '08',
@@ -46,19 +45,16 @@ export default function AccountTransaction() {
 
     const [open, setOpen] = useState(false);
     const [transactionType, setTransactionType] = useState(null);
-    const [selectedTransaction, setSelectedTransaction] = useState(null);
     const handleClose = () => setOpen(false);
     const dispatch = useDispatch();
     const transactionData = useSelector(state => state.transaction.transactionData) || [];
 
-    const handleClick = (type, data) => {
-        setTransactionType(type);
-        setSelectedTransaction(data);
+    const handleClick = (data) => {
         setOpen(!open);
     }
 
     useEffect(() => {
-        // console.log("loop here");
+        console.log("loop here");
         const accoundId = localStorage.getItem("accountId");
         dispatch(fetchAllTransaction(accoundId));
     }, [])
@@ -72,9 +68,8 @@ export default function AccountTransaction() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    {transactionType?.toLowerCase().includes("transfer") && <TransferTransaction transaction={selectedTransaction} />}
-                    {transactionType === "BillPayment" && <BillTransaction transaction={selectedTransaction} />}
-                    {transactionType === "LoanPayment" && <LoanTransaction transaction={selectedTransaction} />}
+                    {/* <TransferTransaction /> */}
+                    <LoanTransaction />
                 </Box>
             </Modal>
             <div className="flex justify-between items-center pb-4">
@@ -85,11 +80,11 @@ export default function AccountTransaction() {
                 {
                     [...(Array.isArray(transactionData) ? transactionData : [])]
                         .sort((a, b) => parseCustomDate(b.TRANSACTIONDATE) - parseCustomDate(a.TRANSACTIONDATE))
-                        .map((item, index) => (
+                        .map((item) => (
                             <div
-                                onClick={() => handleClick(item.TYPE, item)}
+                                onClick={() => handleClick(item.method)}
                                 className="flex justify-between items-center border-b-1 py-3 border-gray-300 cursor-pointer transition-colors duration-200 hover:bg-gray-200 hover:rounded-xl p-5 transition-all duration-100"
-                                key={index}
+                                key={item.TRANSACTIONID}
                             >
                                 <div className="flex flex-col gap-1">
                                     <Typography fontSize="13px" fontWeight={"bold"}>

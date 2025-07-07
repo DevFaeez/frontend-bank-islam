@@ -85,11 +85,11 @@ export default function AdminTranferTransactionDetails() {
               <HeaderCell>Transfer Type</HeaderCell>
               <HeaderCell>Transfer Mode</HeaderCell>
               <HeaderCell>Description</HeaderCell>
-              <HeaderCell>Amount</HeaderCell>
-              <HeaderCell>Transaction Date</HeaderCell>
               <HeaderCell>Receiver Account</HeaderCell>
-              <HeaderCell>Reference Number</HeaderCell>
+              <HeaderCell>Amount</HeaderCell>
               <HeaderCell>Status</HeaderCell>
+              <HeaderCell>Reference Number</HeaderCell>
+              <HeaderCell>Transaction Date</HeaderCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -104,16 +104,16 @@ export default function AdminTranferTransactionDetails() {
                   <TableCell>{tx.TRANSFERTYPE}</TableCell>
                   <TableCell>{tx.TRANSFERMODE}</TableCell>
                   <TableCell>{tx.DESCRIPTION}</TableCell>
+                  <TableCell>{tx.FULLNAME}</TableCell>
                   <TableCell>{tx.AMOUNT}</TableCell>
+                  <TableCell>{tx.STATUS}</TableCell>
+                  <TableCell>{tx.REFERENCENUMBER}</TableCell>
                   <TableCell>
                     {format(
                       parse(tx.TRANSACTIONDATE, "dd-MMM-yy hh.mm.ss.SSSSSS a", new Date()),
                       "dd MMM yyyy, hh:mm a"
                     )}
                   </TableCell>
-                  <TableCell>{tx.RECEIVERACCOUNT}</TableCell>
-                  <TableCell>{tx.REFERENCENUMBER}</TableCell>
-                  <TableCell>{tx.STATUS}</TableCell>
                 </HoverRow>
               ))
             )}
