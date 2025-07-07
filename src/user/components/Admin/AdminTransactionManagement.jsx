@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import AdminTransferTransactionDetails from "./AdminTransferTransactionDetail";
 import AdminTransactionDetails from "./AdminTransactionDetail"; // This has the table
 import AdminBillTransactionDetails from "./AdminBillTransactionDetail";
+import AdminLoanTransactionDetails from "./AdminLoanTransactionDetail";
 
 export default function AdminTransactionManagement() {
   const location = useLocation();
@@ -23,7 +24,7 @@ export default function AdminTransactionManagement() {
         case "bill":
           return <AdminBillTransactionDetails />;
       case "loan":
-        return <p>Loan transactions coming soon.</p>;
+        return <AdminLoanTransactionDetails/>;
       case "list":
       default:
         return <AdminTransactionDetails />;

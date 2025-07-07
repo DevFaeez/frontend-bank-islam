@@ -7,6 +7,7 @@ export const fetchAllLoan = createAsyncThunk(
     async (userData, {rejectWithValue}) => {
         try {
             const response = await axios.get(`${BASEURL}/Controller/AdminLoanApprovalController.php?action=fetchAllLoan`);
+            console.log(response.data);
         return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || { message: "Unknown error" });
@@ -35,6 +36,20 @@ export const downloadLoanData = createAsyncThunk(
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || { message: "Unknown error" });
+        }
+    }
+)
+
+export const fetchAllLoanTrans = createAsyncThunk(
+    "loanapproval/fetchAllLoanTrans",
+    async (userData, {rejectWithValue}) => {
+        try {
+            const response = await axios.get(`${BASEURL}/Controller/AdminLoanApprovalController.php?action=fetchAllLoanTrans`);
+            console.log(response.data);
+        return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || { message: "Unknown error" });
+
         }
     }
 )

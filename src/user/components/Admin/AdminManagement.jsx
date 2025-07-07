@@ -16,8 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { fetchAllTransfer } from "../../store/thunk/Admin/AdminTransferTransactionTrunk";
 import { format, parse } from "date-fns";
-import { fetchAdmin, fetchAllAdmin} from "../../store/thunk/Admin/AdminProfileTrunk";
 import AdminRegister from "../Auth/AdminRegister";
+import { fetchAllAdmin } from "../../store/thunk/Admin/AdminUserManagementTrunk";
 
 export default function AdminManagement() {
   const dispatch = useDispatch();
@@ -25,7 +25,12 @@ export default function AdminManagement() {
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const { data = [], loading, error } = useSelector(state => state.admin || {});
+  const adminUserManageState = useSelector(state => state.adminUserManage || {});
+  const data = Array.isArray(adminUserManageState.data) ? adminUserManageState.data : [];
+
+  const username = localStorage.getItem("username");
+
+
 
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
@@ -74,6 +79,7 @@ export default function AdminManagement() {
         U S E R &nbsp;&nbsp; M A N A G E M E N T
       </Typography>
 
+      {username === "admin" && (
       <Button
         variant="contained"
         color="primary"
@@ -82,6 +88,8 @@ export default function AdminManagement() {
       >
         Register New User
       </Button>
+    )}
+
 
       <TextField
         label="Search Users"

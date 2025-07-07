@@ -86,7 +86,7 @@ export default function AdminBillTransactionDetails() {
               <HeaderCell>Description</HeaderCell>
               <HeaderCell>Reference Number</HeaderCell>
               <HeaderCell>Transaction Date</HeaderCell>
-              <HeaderCell>Bill ID</HeaderCell>
+              <HeaderCell>Bill Account Number</HeaderCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -105,7 +105,7 @@ export default function AdminBillTransactionDetails() {
                   <TableCell>
                     {format(parse(tx.TRANSACTIONDATE, "dd-MMM-yy hh.mm.ss.SSSSSS a", new Date()), "dd MMM yyyy, hh:mm a")}
                   </TableCell>
-                  <TableCell>{tx.BILLID}</TableCell>
+                  <TableCell>{tx.BILLACCOUNTNUMBER}</TableCell>
                 </HoverRow>
               ))
             )}

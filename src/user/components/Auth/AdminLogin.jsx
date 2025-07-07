@@ -36,6 +36,7 @@ const AdminLogin = () => {
                 alert("Login Successful!"); 
                 console.log("account details", payload)
                 localStorage.setItem("employeeId", payload.data.employeeId)
+                localStorage.setItem("username", payload.data.username); 
                 navigate("/admin/dashboard");
             } else {
                 alert(payload.message || "Login failed");
