@@ -12,7 +12,7 @@ export default function TransferTransaction({ transaction }) {
                     <Typography variant="body2" sx={{ color: "#DC2A54", fontWeight: "bold" }}>TRANSFER DETAILS</Typography>
                 </div>
                 <div className="flex justify-between items-center">
-                    <Typography sx={{ fontSize: "15px" }}>Reference ID: {transaction.data}</Typography>
+                    <Typography sx={{ fontSize: "15px" }}>Reference ID: {transaction.REFERENCENUMBER}</Typography>
                     <Typography sx={{ fontSize: "15px" }}>Date: {transaction.TRANSACTIONDATE.substring(0, 15) + transaction.TRANSACTIONDATE.substring(26, 29)}</Typography>
                 </div>
                 <div className="flex flex-col justify-between items-start">
