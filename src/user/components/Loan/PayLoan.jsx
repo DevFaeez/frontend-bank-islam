@@ -38,6 +38,8 @@ export default function PayLoan() {
         }
         console.log("myLoandata", data);
 
+        console.log("values", values);
+
         const result = await dispatch(payMyLoan(data));
         const payload = result.payload;
 
