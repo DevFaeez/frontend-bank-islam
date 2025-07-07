@@ -59,7 +59,6 @@ export default function AdminLoanApproval() {
 
     const loanStatus = useMemo(() => formattedLoan(), [loanDetails]);
 
-
     useEffect(() => {
         dispatch(fetchAllLoan());
     }, [])
@@ -70,6 +69,8 @@ export default function AdminLoanApproval() {
             loanId: loanId,
             employeeId: localStorage.getItem("employeeId")
         }
+
+        console.log(data);
 
         dispatch(updateLoanStatus(data));
     }

@@ -39,8 +39,9 @@ export default function LoanTransaction({transaction}) {
                     <Typography sx={{fontSize: "15px"}}>Interest Rate: {transaction.INTERESTRATE}%</Typography>
                 </div>
                 <div className="flex flex-col justify-between items-start">
-                    <Typography sx={{fontSize: "15px"}}>Amount Pay: RM {transaction.AMOUNT}</Typography>
-                    <Typography sx={{fontSize: "15px"}}>Amount Apply: RM {transaction.BALANCE}</Typography>
+                    <Typography sx={{fontSize: "15px"}}>Amount Apply: RM {transaction.AMOUNT}</Typography>
+                    <Typography sx={{fontSize: "15px"}}>Amount Pay: RM {transaction.BALANCE}</Typography>
+                    <Typography sx={{fontSize: "15px"}}>Amount Balance: RM {transaction.AMOUNT - transaction.BALANCE}</Typography>
                     <Typography sx={{fontSize: "15px"}}>Term: {transaction.TERM} Month</Typography>
                 </div>
             </div>

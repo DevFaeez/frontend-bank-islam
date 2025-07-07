@@ -56,13 +56,13 @@ export default function AccountFlow() {
             </Box>
             <Box sx={{ position: "absolute" }}>
                 <Typography variant="h6" color="black" fontWeight="bold" sx={{ textAlign: "center" }}>
-                    Dec 2025
+                    July 2025
                 </Typography>
                 <Typography fontSize={"11px"} sx={{ textAlign: "center", color: "#FFD354", fontWeight: "bold" }}>
-                    Total In: RM{totalIn}
+                    Total In: RM{totalIn.toFixed(2)}
                 </Typography>
                 <Typography fontSize={"11px"} sx={{ textAlign: "center", color: "#F14F75", fontWeight: "bold" }}>
-                    Total Out: RM{totalOut}
+                    ∑ Out: RM{totalOut.toFixed(2)}
                 </Typography>
             </Box>
         </div>
