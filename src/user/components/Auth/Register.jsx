@@ -4,6 +4,7 @@ import { Field, Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../store/thunk/AuthThunk";
+import Swal from "sweetalert2";
 
 
 const initialValue = {
@@ -41,20 +42,24 @@ const Register = () => {
                 username: values.username
             }
 
-        const result = await dispatch(registerUser(data));
+            const result = await dispatch(registerUser(data));
 
-        console.log("step 1");
+            console.log("step 1");
 
-        const payload = result.payload;
+            const payload = result.payload;
 
-        if (payload.result === "success") {
-            alert("Registration Successful!");
-            console.log("account details", payload)
-            localStorage.setItem("accountId", payload.data.accountId)
-            navigate("/dashboard");
-        } else {
-            alert(payload.message || "Registration failed");
-        }
+            if (payload.result === "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Registration Success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                localStorage.setItem("accountId", payload.data.accountId)
+                navigate("/dashboard");
+            } else {
+                alert(payload.message || "Registration failed");
+            }
         } catch (error) {
             console.error("Registration error", error);
             alert("An unexpected error occurred.");
@@ -88,7 +93,7 @@ const Register = () => {
                             error={
                                 touched.fullName && Boolean(errors.fullName)
                             }
-                            
+
                         />
                         <Field
                             as={TextField}
@@ -155,7 +160,7 @@ const Register = () => {
                 )}
             </Formik>
             <Typography variant="body2" sx={{ textAlign: "center", padding: "10px" }}>
-                Already have account, <b onClick={() => navigate("/login")} style={{color: "#DC2A54", cursor: "pointer"}}>Login</b>
+                Already have account, <b onClick={() => navigate("/login")} style={{ color: "#DC2A54", cursor: "pointer" }}>Login</b>
             </Typography>
         </div>
     );
