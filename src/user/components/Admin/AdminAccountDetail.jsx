@@ -9,6 +9,7 @@ import { fetchAllTrans } from "../../store/thunk/Admin/AdminTransactionTrunk";
 import { parse, format, startOfDay, subDays, eachDayOfInterval } from "date-fns";
 import { fetchAllBillTrans } from "../../store/thunk/Billthunk";
 import { fetchAllTransfer } from "../../store/thunk/Admin/AdminTransferTransactionTrunk";
+import { fetchAllLoan } from "../../store/thunk/Admin/ApprovalSliceThunk";
 
 
 
@@ -18,15 +19,22 @@ export default function AdminAccountDetails() {
   const dispatch = useDispatch();
   const allUsers = useSelector((state) => state.adminUserDetail.data); // adjust state slice name
   const allTransaction = useSelector((state) => state.adminTransaction.data);
+  const allLoan = useSelector((state) => state.adminLoanApproval.loanData);
 
   const allTransferTransaction = useSelector((state) => state.adminTranferTransaction.data);
   const allBillTransaction = useSelector((state) => state.bill.data);
+
+const loanTotal = useMemo(() => {
+  return allTransaction.reduce((sum, item) => sum + Number(item.AMOUNT || 0), 0);
+  }, [allTransaction]);
+
 
   useEffect(() => {
     dispatch(fetchAllUser());
     dispatch(fetchAllTrans());
     dispatch(fetchAllTransfer());
     dispatch(fetchAllBillTrans());
+    dispatch(fetchAllLoan())
 }, [dispatch]);
 
   // Line Chart
@@ -114,12 +122,12 @@ export default function AdminAccountDetails() {
 
         <div className="bg-[#bf1e43] hover:bg-[#8c1a35] transition-all duration-300 rounded-xl p-4 shadow text-white select-none shadow-[0_0_10px_rgba(0,0,0,0)] hover:shadow-[0_5px_10px_rgba(0,0,0,0.5)]">
           <Typography fontWeight="bold" fontSize={14}>Total Deposits</Typography>
-          <Typography fontSize={24} fontWeight="bold">RM 1.23M</Typography>
+          <Typography fontSize={24} fontWeight="bold">RM {loanTotal}</Typography>
         </div>
 
         <div className="bg-[#981835] hover:bg-[#78112d] transition-all duration-300 rounded-xl p-4 text-white select-none shadow-[0_0_10px_rgba(0,0,0,0)] hover:shadow-[0_5px_10px_rgba(0,0,0,0.5)]">
           <Typography fontWeight="bold" fontSize={14}>Loan Applications</Typography>
-          <Typography fontSize={24} fontWeight="bold">120</Typography>
+          <Typography fontSize={24} fontWeight="bold">{allLoan?.length  ?? 0}</Typography>
         </div>
       </div>
 
